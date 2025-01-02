@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Акции мосбиржи</title>
+    <link rel="stylesheet" href="{% static 'stocks/css/stocks_main.css' %}">
+</head>
+<body>
+{% include 'includes/navbar_pydd_study.html' %}
+ <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
+<br>
+<form action="update-stocks">
+    <button class="btn-new">Обновить данные</button>
+</form>
+ <form action="delete-stocks">
+    <button class="btn-del">Удалить данные</button>
+</form>
+<h2>Всего акций: {{stocks_count}}</h2>
+<br>
+
+    <table class="table">
+        <tr>
+            <td><b>№</b></td>
+            {% for item in stocks_keys %}
+            <td><b>{{item|title}}</b></td>
+            {% endfor %}
+        </tr>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td><b>{{stock.secid}}</b></td>
+            <td><b>{{stock.boardid}}</b></td>
+            <td><b>{{stock.shortname}}</b></td>
+            <td><b>{{stock.lotsize}}</b></td>
+            <td><b>{{stock.secname}}</b></td>
+            <td><b>{{stock.listlevel}}</b></td>
+            <td><b>{{stock.issuesize}}</b></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+</body>
+</html>

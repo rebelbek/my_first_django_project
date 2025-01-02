@@ -1,0 +1,90 @@
+.table{
+	border: 1px solid #eee;
+	table-layout: fixed;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+
+.table td{
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	text-align: left;
+}
+
+.table tbody tr:nth-child(odd){
+	background: #fff;
+}
+
+.table tbody tr:nth-child(even){
+	background: #F7F7F7;
+}
+
+.btn-new {
+    border-radius: 30px;
+    color: white;
+    transition: .2s linear;
+    background: green;
+    position: absolute;
+    top: 60px;
+    right: 200px;
+    padding: 10px 10px;
+}
+
+.btn-new:hover {
+   box-shadow: #003CC5 0 0px 0px 40px inset;
+}
+
+.btn-del {
+    border-radius: 30px;
+    color: white;
+    transition: .2s linear;
+    background: green;
+    position: absolute;
+    top: 60px;
+    right: 50px;
+    padding: 10px 10px;
+}
+
+.btn-del:hover {
+   box-shadow: #003CC5 0 0px 0px 40px inset;
+}
+body {
+margin: 20px;
+padding:10px;
+letter-spacing: 1px;
+background-image: url("/static/img/background.png");
+background-size: no-repeat;
+background-position: center;
+background-size: cover;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 3%;
+  font-size: 50px;
+  color: green;
+  background: transparent;
+  box-shadow: 0 2px 8px #3ca3c1;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+nav a {
+color: gold;
+font-size: 1.5rem;
+margin: 10px;
+}
+
+nav a:hover, ul a:active {
+color: #eca8b5;
+}

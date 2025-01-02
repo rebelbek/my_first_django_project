@@ -1,0 +1,167 @@
+body {
+letter-spacing: 0.7px;
+background-image: url("/static/img/background.png");
+background-size: no-repeat;
+background-position: center;
+background-size: cover;
+}
+
+a {
+   color: #0a373d;
+}
+
+li {
+padding: 7px;
+}
+
+div {
+margin: 3%;
+padding: 10px;
+width: 90%;
+word-break: break-all;
+border-radius: 10px;
+font-size: 25px;
+background-color: white;
+box-shadow: 0 2px 8px #3ca3c1;
+}
+
+textarea {
+margin: 3%;
+padding: 20px;
+width: 80%;
+border-radius: 10px;
+font-size: 25px;
+background-color: white;
+box-shadow: 0 2px 8px #3ca3c1;
+}
+
+nav a {
+color: gold;
+font-size: 1.5rem;
+margin: 10px;
+}
+
+nav a:hover, ul a:active {
+color: #eca8b5;
+}
+
+h1 {
+text-indent: 60px;
+text-align: center;
+}
+
+h2 {
+text-indent: 60px;
+font-size: 2rem;
+}
+
+p {
+margin: 3px;
+padding: 1px;
+text-indent: 30px;
+font-family: Georgia, serif;
+}
+
+header {
+text-align: center;
+color: white;
+-webkit-text-stroke: 1.5px black;
+text-stroke: 1px #6b62ba;
+/*padding: 5px;
+margin-top: 2%;
+height: 100px;*/
+font-size: 4rem;
+letter-spacing: 2px;
+font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+main {
+display: flex;
+padding: 5px;
+justify-content; flex-start;
+height: auto;
+margin: 2%;
+}
+
+aside {
+color: white;
+-webkit-text-stroke: 0.3px black;
+margin: 1px;
+padding:5px;
+width: 15%;
+font-size: 1.5rem;
+border-radius: 15px;
+box-shadow: 0 2px 8px #3ca3c1;
+}
+
+aside a:hover, ul a:active {
+color: white;
+visited: white;
+}
+
+article {
+color: black;
+background-color: #fcfcfc;
+padding: 20px;
+width: 85%;
+margin-left: 3%;
+font-size: 1.8rem;
+border-radius: 15px;
+box-shadow: 0 2px 8px #3ca3c1;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  left: 3%;
+  font-size: 50px;
+  color: white;
+  background: transparent;
+  box-shadow: 0 2px 8px #3ca3c1;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.back-to-top:hover {
+  background: green;
+  text-decoration: none;
+}
+
+table {
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+}
+table thead th {
+	font-weight: bold;
+	text-align: left;
+	border: none;
+	padding: 10px 15px;
+	background: #d8d8d8;
+	font-size: 25px;
+}
+table thead tr th:first-child {
+	border-radius: 8px 0 0 8px;
+}
+table thead tr th:last-child {
+	border-radius: 0 8px 8px 0;
+}
+table tbody td {
+	text-align: left;
+	border: none;
+	padding: 10px 15px;
+	font-size: 25px;
+	vertical-align: top;
+}
+table tbody tr:nth-child(even){
+	background: #f3f3f3;
+}
+table tbody tr td:first-child {
+	border-radius: 8px 0 0 8px;
+}
+table tbody tr td:last-child {
+	border-radius: 0 8px 8px 0;
+}
+

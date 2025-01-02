@@ -1,0 +1,47 @@
+{% extends 'django_app/base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{des.chapter_name}}
+{% endblock %}
+
+
+{% block navbar %}
+    {% include 'includes/navbar_pydd_study.html' %}
+{% endblock %}
+
+
+{% block description %}
+    <h1>{{des.chapter_name}}.</h1>
+    <br>
+    <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
+    {% if des.files.file %}
+        <h1><img src="{{des.files.file.url}}" width='900' height='400'></h1>
+    {% endif %}
+    {{des.text|safe}}
+    {% for link in des.links.all %}
+        <ul>
+            {% if link.description %}
+                 <li><p><a href="{{link.link}}" target='_blank' rel='noopener noreferrer'>{{link.name}}</a> - {{link.description}}</p></li>
+            {% else %}
+                 <li><p><a href="{{link.link}}" target='_blank' rel='noopener noreferrer'>{{link.name}}</a></p></li>
+            {% endif %}
+        </ul>
+    {% endfor %}
+{% endblock %}
+
+
+{% block aside %}
+    <aside>
+        <ol>
+            {% for chapter in chapters|dictsort:"number" %}
+            <li>
+                <a href = "{{ chapter.get_url }}">
+                {{chapter.chapter_name}}</a>
+            </li>
+            {% endfor %}
+        </ol>
+    </aside>
+{% endblock %}
+
