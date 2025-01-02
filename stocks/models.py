@@ -13,7 +13,7 @@ class StockInfo(models.Model):
     issuesize = models.PositiveBigIntegerField()
 
     def __str__(self):
-        return f'Secid = {self.secid} | Boardid = {self.boardid} | Shortname = {self.shortname}'
+        return f'Secid = {self.secid} | Shortname = {self.shortname} | Secname = {self.secname} '
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
