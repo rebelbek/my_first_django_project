@@ -55,6 +55,7 @@
 .btn-del:hover {
    box-shadow: #003CC5 0 0px 0px 40px inset;
 }
+
 body {
 margin: 20px;
 padding:10px;
@@ -88,3 +89,4 @@ margin: 10px;
 nav a:hover, ul a:active {
 color: #eca8b5;
 }
+

@@ -2,15 +2,24 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import StockInfo
+from .forms import SearchForm
 from . import get_stocks
 
 # Create your views here.
 
 def main_stocks(request):
-    stocks = StockInfo.objects.all()
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        if form.cleaned_data['field'] == 'Secname':
+            stocks = StockInfo.objects.filter(secname__icontains=form.cleaned_data['input'])
+        elif form.cleaned_data['field'] == 'Secid':
+            stocks = StockInfo.objects.filter(secid__icontains=form.cleaned_data['input'])
+    else:
+        stocks = StockInfo.objects.all()
     stocks_count = stocks.count()
     stocks_keys = list(StockInfo().__dict__.keys())[1:]
     context = {'stocks' : stocks,
+               'form' : form,
                'stocks_count' : stocks_count,
                'stocks_keys': stocks_keys}
     return render(request, 'stocks/stocks.html', context=context)

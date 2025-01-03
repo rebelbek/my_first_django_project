@@ -17,8 +17,15 @@
  <form action="delete-stocks">
     <button class="btn-del">Удалить данные</button>
 </form>
-<h2>Всего акций: {{stocks_count}}</h2>
-<br>
+
+<form action="" method="GET">
+    {{form.field.label_tag}}
+    {{form.field}}
+    {{form.input.label_tag}}<br>
+    {{form.input}}
+    <button type="submit">Поиск</button>
+</form>
+<p>Всего акций: {{stocks_count}}</p>
 
     <table class="table">
         <tr>
