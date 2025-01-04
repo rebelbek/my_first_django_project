@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import StockInfo
 from .forms import SearchForm
-from . import get_stocks
+from .scripts import get_stocks
+
 
 # Create your views here.
 
