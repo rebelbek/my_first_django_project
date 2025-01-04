@@ -32,27 +32,12 @@
     transition: .2s linear;
     background: green;
     position: absolute;
-    top: 60px;
-    right: 200px;
-    padding: 10px 10px;
-}
-
-.btn-new:hover {
-   box-shadow: #003CC5 0 0px 0px 40px inset;
-}
-
-.btn-del {
-    border-radius: 30px;
-    color: white;
-    transition: .2s linear;
-    background: green;
-    position: absolute;
-    top: 60px;
+    top: 50px;
     right: 50px;
     padding: 10px 10px;
 }
 
-.btn-del:hover {
+.btn-new:hover {
    box-shadow: #003CC5 0 0px 0px 40px inset;
 }
 

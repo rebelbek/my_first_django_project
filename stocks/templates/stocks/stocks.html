@@ -11,19 +11,20 @@
 {% include 'includes/navbar_pydd_study.html' %}
  <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
 <br>
-<form action="update-stocks">
+<form action="stocks-update">
     <button class="btn-new">Обновить данные</button>
 </form>
- <form action="delete-stocks">
-    <button class="btn-del">Удалить данные</button>
-</form>
 
-<form action="" method="GET">
+<form action="{% url 'stocks_search' %}" method="GET">
     {{form.field.label_tag}}
     {{form.field}}
     {{form.input.label_tag}}<br>
     {{form.input}}
     <button type="submit">Поиск</button>
+</form>
+
+<form action="{% url 'stocks_main' %}">
+    <button type="submit">Сброс</button>
 </form>
 <p>Всего акций: {{stocks_count}}</p>
 
@@ -47,7 +48,6 @@
         </tr>
         {% endfor %}
     </table>
-
 
 </body>
 </html>
