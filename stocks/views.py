@@ -11,11 +11,11 @@ def stocks_main(request):
     form = SearchForm()
     stocks = StockInfo.objects.all()
     stocks_count = stocks.count()
-    stocks_keys = list(StockInfo().__dict__.keys())[1:]
+    stocks_fields = ['secid', 'boardid', 'shortname', 'lotsize', 'secname', 'listlevel', 'issuesize']
     context = {'stocks' : stocks,
                'form' : form,
                'stocks_count' : stocks_count,
-               'stocks_keys': stocks_keys}
+               'stocks_fields': stocks_fields}
     return render(request, 'stocks/stocks.html', context=context)
 
 
@@ -42,7 +42,7 @@ def stocks_update(request):
     stocks_list = get_stocks_list()
     StockInfo.objects.all().delete()
     for item in stocks_list:
-        stock = StockInfo(*list(item.values()))
+        stock = StockInfo(*item)
         stock.save()
     redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)
