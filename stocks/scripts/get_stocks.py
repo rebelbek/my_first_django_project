@@ -1,16 +1,17 @@
 import os
-import requests #внешний модуль
-from dotenv import load_dotenv #внешний модуль python-dotenv
-from bs4 import BeautifulSoup #внешний модуль
-#Дополнительно должен быть установлен модуль lxml(он нужен для BeautifulSoup)
+import sys
+import requests # внешний модуль
+from bs4 import BeautifulSoup # внешний модуль
+# дополнительно должен быть установлен модуль lxml (он нужен для BeautifulSoup)
 
-# используется каталог .env для скрытия url
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
-moex_api_url = os.environ.get('url')
+# добавил путь для импорта скрипта который получает url из .env
+# и импортировал функцию из скрипта
+sys.path.append(os.path.join(os.getcwd(), '../..'))
+from env.get_from_env import get_url_from_env
 
-response = requests.get(moex_api_url)
+url = get_url_from_env()
+
+response = requests.get(url)
 soup = BeautifulSoup(response.content, 'xml')
 
 # для выборки полей из данных xml
@@ -47,7 +48,7 @@ def show_stocks_list() -> None:
         print(' | '.join(tmp_list))
         print('-' * 130)
 
-#Если открывается из самого скрипта без импортирования
+# если открывается из самого скрипта без импортирования
 if __name__ == "__main__":
     show_stocks_list()
 

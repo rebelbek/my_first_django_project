@@ -44,5 +44,5 @@ def stocks_update(request):
     for item in stocks_list:
         stock = StockInfo(*list(item.values()))
         stock.save()
-    redirect_url = reverse('main_stocks')
+    redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)
