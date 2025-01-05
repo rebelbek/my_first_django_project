@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup # внешний модуль
 # дополнительно должен быть установлен модуль lxml (он нужен для BeautifulSoup)
 
 # добавил путь для импорта скрипта который получает url из .env
-# и импортировал функцию из скрипта
+# и импортировал переменную из скрипта
 sys.path.append(os.path.join(os.getcwd(), '../..'))
-from env.get_from_env import get_url_from_env
+from env.get_from_env import url_from_env
 
-url = get_url_from_env()
+url = url_from_env
 
 response = requests.get(url)
 soup = BeautifulSoup(response.content, 'xml')

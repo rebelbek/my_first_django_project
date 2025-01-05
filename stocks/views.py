@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import StockInfo
 from .forms import SearchForm
-from .scripts import get_stocks
+from .scripts.get_stocks import get_stocks_list
 
 # Create your views here.
 
@@ -39,7 +39,7 @@ def stocks_search(request):
 
 
 def stocks_update(request):
-    stocks_list = get_stocks.get_stocks_list()
+    stocks_list = get_stocks_list()
     StockInfo.objects.all().delete()
     for item in stocks_list:
         stock = StockInfo(*list(item.values()))

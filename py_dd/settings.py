@@ -11,15 +11,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django.conf.global_settings import DATABASES
 import os
 import sys
 
-from django.conf.global_settings import DATABASES
-
 # добавил путь для импорта скрипта который получает данные из .env
-# и импортировал функции из скрипта
+# и импортировал переменные из скрипта
 sys.path.append(os.path.join(os.getcwd(), '..'))
-from env.get_from_env import get_db_passw_from_env, get_db_user_from_env
+from env.get_from_env import db_password, db_user
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,8 +89,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'db_rebelbek',
-        'USER': get_db_user_from_env(),
-        'PASSWORD': get_db_passw_from_env(),
+        'USER': db_user,
+        'PASSWORD': db_password,
         'HOST': 'localhost'
     }
 }
