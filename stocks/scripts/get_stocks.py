@@ -16,7 +16,7 @@ xml_dict = xmltodict.parse(xml)
 data_securities = xml_dict['document']['data'][0]
 data_marketdata = xml_dict['document']['data'][1]
 list_securities_names = ["secid", "boardid", "shortname", "prevprice", "lotsize", "facevalue", "boardname", "secname", "prevwaprice", "prevdate", "issuesize", "isin", "latname", "prevlegalcloseprice", "listlevel", "settledate"]
-list_marketdata_names = ["open", "low", "high", "value", "value_usd", "waprice", "valtoday", "valtoday_usd"]
+list_marketdata_names = ["open", "low", "high", "last", "value", "value_usd", "waprice", "valtoday", "valtoday_usd"]
 
 def get_stocks_list():
     list_securities = []

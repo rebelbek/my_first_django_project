@@ -32,18 +32,18 @@
         <tr>
             <td><b>№</b></td>
             {% for item in stocks_fields %}
-            <td><b>{{item|title}}</b></td>
+            <td><b>{{item|capfirst}}</b></td>
             {% endfor %}
         </tr>
         {% for stock in stocks %}
         <tr>
             <td>{{forloop.counter}}</td>
-            <td><b>{{stock.secid}}</b></td>
+            <td><b><a href = "{{stock.get_url}}">{{stock.secid}}</a></b></td>
             <td><b>{{stock.shortname}}</b></td>
-            <td><b>{{stock.lotsize}}</b></td>
             <td><b>{{stock.secname}}</b></td>
             <td><b>{{stock.issuesize}}</b></td>
-            <td><b>{{stock.value}}</b></td>
+            <td><b>{{stock.lotsize}}</b></td>
+            <td><b>{{stock.last}}</b></td>
         </tr>
         {% endfor %}
     </table>

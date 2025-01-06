@@ -3,7 +3,7 @@ from .models import StockInfo
 
 # Register your models here.
 class StockAdmin(admin.ModelAdmin):
-    list_display = ['secid','boardid','shortname','lotsize','secname','listlevel','issuesize']
+    list_display = ['secid','shortname','secname', 'lotsize', 'issuesize', 'last']
     list_per_page = 50
     ordering = ['secid']
 

@@ -1,16 +1,17 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
 class StockInfo(models.Model):
     secid = models.CharField(max_length=10, unique=True)
     boardid = models.CharField(max_length=40)
-    shortname = models.CharField(max_length=40)
+    shortname = models.CharField(max_length=40, blank=False)
     prevprice = models.FloatField()
     lotsize = models.IntegerField()
     facevalue = models.FloatField()
     boardname = models.CharField(max_length=40)
-    secname = models.CharField(max_length=40)
+    secname = models.CharField(max_length=40, blank=False)
     prevwaprice = models.FloatField()
     prevdate = models.DateField()
     issuesize = models.PositiveBigIntegerField()
@@ -22,17 +23,19 @@ class StockInfo(models.Model):
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)
+    last = models.FloatField(null=True)
     value = models.FloatField(null=True)
     value_usd = models.FloatField(null=True)
     waprice = models.FloatField(null=True)
     valtoday = models.FloatField( null=True)
     valtoday_usd = models.FloatField(null=True)
 
-
     def __str__(self):
-        return f'Secid = {self.secid} | Shortname = {self.shortname} | Secname = {self.secname} '
-
+        return f'{self.secname}, цена = {self.last}'
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
+
+    def get_url(self):
+        return reverse('stock_detail', args=[self.secid])
 

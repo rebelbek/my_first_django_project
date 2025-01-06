@@ -1,16 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import StockInfo
-from .forms import SearchForm
+from .forms import SearchForm, StockInfoForm
 from .scripts.get_stocks import get_stocks_list
 
 # Create your views here.
-stocks_fields_to_show = ['secid', 'shortname', 'lotsize', 'secname', 'issuesize', 'value']
+stocks_fields_to_show = ['тикер', 'короткое название', 'полное название', 'количество акций', 'размер лота', 'цена']
 
 def stocks_main(request):
     form = SearchForm()
-    stocks = StockInfo.objects.all()
+    stocks = StockInfo.objects.order_by('secid')
     stocks_count = stocks.count()
     context = {'stocks' : stocks,
                'form' : form,
@@ -18,6 +18,22 @@ def stocks_main(request):
                'stocks_fields': stocks_fields_to_show}
     return render(request, 'stocks/stocks.html', context=context)
 
+
+def stock_detail(request, secid: str):
+    stock = get_object_or_404(StockInfo, secid = secid)
+    if request.method == 'POST':
+        form = StockInfoForm(request.POST, instance=stock)
+        if form.is_valid():
+            form.save()
+            redirect_url = reverse(f'stock_detail', args=[secid])
+            return HttpResponseRedirect(redirect_url)
+    else:
+        form = StockInfoForm(instance=stock)
+    values_list = list(stock.__dict__.items())[1:]
+    context = {'values_list' : values_list,
+               'stock' : stock,
+               'form' : form}
+    return render(request, 'stocks/stock_detail.html', context=context)
 
 def stocks_search(request):
     form = SearchForm(request.GET)
