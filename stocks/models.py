@@ -1,6 +1,5 @@
 from django.db import models
 
-
 # Create your models here.
 
 class StockInfo(models.Model):
@@ -10,27 +9,24 @@ class StockInfo(models.Model):
     prevprice = models.FloatField()
     lotsize = models.IntegerField()
     facevalue = models.FloatField()
-    status = models.CharField(max_length=3)
     boardname = models.CharField(max_length=40)
-    decimals = models.IntegerField(default=1)
     secname = models.CharField(max_length=40)
-    remarks = models.CharField(max_length=40)
-    marketcode = models.CharField(max_length=40)
-    instrid = models.CharField(max_length=10)
-    sectorid = models.CharField(max_length=40)
-    minstep = models.FloatField()
     prevwaprice = models.FloatField()
-    faceunit = models.CharField(max_length=40)
     prevdate = models.DateField()
     issuesize = models.PositiveBigIntegerField()
     isin = models.CharField(max_length=40, primary_key=True)
     latname = models.CharField(max_length=40)
-    regnumber = models.CharField(max_length=40)
     prevlegalcloseprice = models.FloatField()
-    currencyid = models.CharField(max_length=40)
-    sectype = models.CharField(max_length=40)
     listlevel = models.IntegerField()
     settledate = models.DateField()
+    open = models.FloatField(null=True)
+    low = models.FloatField(null=True)
+    high = models.FloatField(null=True)
+    value = models.FloatField(null=True)
+    value_usd = models.FloatField(null=True)
+    waprice = models.FloatField(null=True)
+    valtoday = models.FloatField( null=True)
+    valtoday_usd = models.FloatField(null=True)
 
 
     def __str__(self):
@@ -39,3 +35,4 @@ class StockInfo(models.Model):
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
+

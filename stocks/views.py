@@ -6,16 +6,16 @@ from .forms import SearchForm
 from .scripts.get_stocks import get_stocks_list
 
 # Create your views here.
+stocks_fields_to_show = ['secid', 'shortname', 'lotsize', 'secname', 'issuesize', 'value']
 
 def stocks_main(request):
     form = SearchForm()
     stocks = StockInfo.objects.all()
     stocks_count = stocks.count()
-    stocks_fields = ['secid', 'boardid', 'shortname', 'lotsize', 'secname', 'listlevel', 'issuesize']
     context = {'stocks' : stocks,
                'form' : form,
                'stocks_count' : stocks_count,
-               'stocks_fields': stocks_fields}
+               'stocks_fields': stocks_fields_to_show}
     return render(request, 'stocks/stocks.html', context=context)
 
 
@@ -30,11 +30,10 @@ def stocks_search(request):
         redirect_url = reverse('main_stocks')
         return HttpResponseRedirect(redirect_url)
     stocks_count = stocks.count()
-    stocks_keys = list(StockInfo().__dict__.keys())[1:]
     context = {'stocks' : stocks,
                'form' : form,
                'stocks_count' : stocks_count,
-               'stocks_keys': stocks_keys}
+               'stocks_fields': stocks_fields_to_show}
     return render(request, 'stocks/stocks.html', context=context)
 
 
