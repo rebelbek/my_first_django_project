@@ -75,7 +75,7 @@ def stocks_update(request):
     for item in stocks_fields_marketdata:
         stock = StockInfoMarketdata(**item)
         stock.save()
-    # связать талицы
+    # связать таблицы
     for item in StockInfoSecurities.objects.all():
         item.marketdata = StockInfoMarketdata.objects.get(secid=f'{item.secid}')
         item.save()
