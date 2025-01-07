@@ -34,7 +34,7 @@ def stock_detail(request, secid: str):
     values_list = list(stock.__dict__.items())[1:]
     try:
         stock_marketdata = StockInfoMarketdata.objects.get(secid=f'{stock.secid}')
-        values_marketdata_list = list(stock_marketdata.__dict__.items())[2:]
+        values_marketdata_list = list(stock_marketdata.__dict__.items())[3:]
     except:
         values_marketdata_list = []
     context = {'values_list' : values_list,
@@ -63,14 +63,21 @@ def stocks_search(request):
 
 
 def stocks_update(request):
-    StockInfoSecurities.objects.all().delete()
+    StockInfoSecurities.objects.exclude(unchangeable=True).delete()
     StockInfoMarketdata.objects.all().delete()
+
     stocks_fields_securities = get_stocks_list(dict(StockInfoSecurities().__dict__.items()))
     stocks_fields_marketdata = get_stocks_list(dict(StockInfoMarketdata().__dict__.items()))
     # сохранить данные для таблицы StockInfoSecurities
+    unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all()]
     for item in stocks_fields_securities:
-        stock = StockInfoSecurities(**item)
-        stock.save()
+        if item['secid'] not in unchangeable_stocks:
+            stock = StockInfoSecurities(**item)
+            stock.save()
+        else:
+            del item['shortname']
+            del item['secname']
+            StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
     # сохранить данные для таблицы StockInfoMarketdata
     for item in stocks_fields_marketdata:
         stock = StockInfoMarketdata(**item)

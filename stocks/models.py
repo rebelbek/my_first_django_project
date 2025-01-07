@@ -1,18 +1,18 @@
 from django.db import models
 from django.urls import reverse
-
+from django.core.validators import MinLengthValidator
 
 # Create your models here.
 
 class StockInfoSecurities(models.Model):
-    secid = models.CharField(max_length=10)
+    secid = models.CharField(max_length=10, unique=True)
     boardid = models.CharField(max_length=40)
-    shortname = models.CharField(max_length=40, blank=False)
+    shortname = models.CharField(max_length=20, validators=[MinLengthValidator(3)], blank=False)
     prevprice = models.FloatField()
     lotsize = models.IntegerField()
     facevalue = models.FloatField()
     boardname = models.CharField(max_length=40)
-    secname = models.CharField(max_length=40, blank=False)
+    secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)
     prevwaprice = models.FloatField()
     prevdate = models.DateField()
     issuesize = models.PositiveBigIntegerField()
@@ -21,6 +21,7 @@ class StockInfoSecurities(models.Model):
     prevlegalcloseprice = models.FloatField()
     listlevel = models.IntegerField()
     settledate = models.DateField()
+    unchangeable = models.BooleanField(default=False)
     marketdata = models.OneToOneField('StockInfoMarketdata', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -34,7 +35,7 @@ class StockInfoSecurities(models.Model):
 
 
 class StockInfoMarketdata(models.Model):
-    secid = models.CharField(max_length=10)
+    secid = models.CharField(max_length=10, unique=True)
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)

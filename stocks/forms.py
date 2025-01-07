@@ -1,6 +1,7 @@
 from django import forms
 from .models import StockInfoSecurities
 
+
 class SearchForm(forms.Form):
     field_choices = [
         ('Secid', 'Тикер'),
@@ -9,23 +10,25 @@ class SearchForm(forms.Form):
     input = forms.CharField(label='Введите часть названия', max_length=40, required=False)
     field = forms.ChoiceField(label='Выберите поле поиска', widget=forms.RadioSelect, choices=field_choices)
 
+
 class StockInfoForm(forms.ModelForm):
     class Meta:
         model = StockInfoSecurities
-        fields = ['shortname', 'secname']
+        fields = ['shortname', 'secname', 'unchangeable']
         labels = {
             'shortname' : 'Короткое название',
             'secname' : 'Полное название',
-        }
+            'unchangeable' : 'Не изменять при обновлении',
+            }
         error_messages = {
             'shortname': {
-                'min_lenght': 'Меньше 3 символов',
-                'max_lenght': 'Больше 40 символов',
+                'min_length': 'Меньше 3 символов',
+                'max_length': 'Больше 40 символов',
                 'required': 'Не должно быть пустым',
-            },
+                },
             'secname': {
-                'min_lenght': 'Меньше 3 символов',
-                'max_lenght': 'Больше 40 символов',
+                'min_length': 'Меньше 3 символов',
+                'max_length': 'Больше 40 символов',
                 'required': 'Не должно быть пустым',
+                }
             }
-        }

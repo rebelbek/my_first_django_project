@@ -8,13 +8,15 @@ import xmltodict # внешний модуль
 sys.path.append(os.path.join(os.getcwd(), '../..'))
 from env.get_from_env import url_from_env
 
-
-url = url_from_env
-response = requests.get(url)
-xml = response.content
-xml_dict = xmltodict.parse(xml)
-data_securities = xml_dict['document']['data'][0]
-data_marketdata = xml_dict['document']['data'][1]
+try:
+    url = url_from_env
+    response = requests.get(url)
+    xml = response.content
+    xml_dict = xmltodict.parse(xml)
+    data_securities = xml_dict['document']['data'][0]
+    data_marketdata = xml_dict['document']['data'][1]
+except:
+    pass
 
 
 def get_data_list(data: list, stocks_fields: dict) -> dict:
@@ -36,7 +38,7 @@ def get_data_list(data: list, stocks_fields: dict) -> dict:
     return result
 
 
-def get_stocks_list(stocks_fields: dict) -> list:
+def get_stocks_list(stocks_fields: dict) -> dict:
     if 'secname' in stocks_fields:
         result = get_data_list(data_securities, stocks_fields)
     else:
