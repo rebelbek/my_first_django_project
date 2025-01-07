@@ -6,6 +6,9 @@ from .forms import SearchForm, StockInfoForm
 from .scripts.get_stocks import get_stocks_list
 
 # Create your views here.
+
+stocks_fields_securities = ["secid", "boardid", "shortname", "prevprice", "lotsize", "facevalue", "boardname", "secname", "prevwaprice", "prevdate", "issuesize", "isin", "latname", "prevlegalcloseprice", "listlevel", "settledate"]
+stocks_fields_marketdata = ["open", "low", "high", "last", "value", "value_usd", "waprice", "valtoday", "valtoday_usd"]
 stocks_fields_to_show = ['тикер', 'короткое название', 'полное название', 'количество акций', 'размер лота', 'цена']
 
 def stocks_main(request):
@@ -54,7 +57,7 @@ def stocks_search(request):
 
 
 def stocks_update(request):
-    stocks_list = get_stocks_list()
+    stocks_list = get_stocks_list(stocks_fields_securities, stocks_fields_marketdata)
     StockInfo.objects.all().delete()
     for item in stocks_list:
         stock = StockInfo(*item)

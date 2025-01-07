@@ -15,45 +15,33 @@ xml = response.content
 xml_dict = xmltodict.parse(xml)
 data_securities = xml_dict['document']['data'][0]
 data_marketdata = xml_dict['document']['data'][1]
-list_securities_names = ["secid", "boardid", "shortname", "prevprice", "lotsize", "facevalue", "boardname", "secname", "prevwaprice", "prevdate", "issuesize", "isin", "latname", "prevlegalcloseprice", "listlevel", "settledate"]
-list_marketdata_names = ["open", "low", "high", "last", "value", "value_usd", "waprice", "valtoday", "valtoday_usd"]
 
-def get_stocks_list():
-    list_securities = []
-    list_marketdata = []
-    for rows in data_securities['rows']['row']:
-        tmp_securities_list = []
-        for key, value in rows.items():
-            if key[1:].lower() in list_securities_names:
-                if value.isdigit():
-                    tmp_securities_list.append(int(value))
-                else:
-                    try:
-                        tmp_securities_list.append(float(value))
-                    except:
-                        tmp_securities_list.append(value)
-        list_securities.append(tmp_securities_list)
 
-    for rows in data_marketdata['rows']['row']:
-        tmp_marketdata_list = []
+def get_data_list(data: list, stocks_fields: list) -> list:
+    result = []
+    for rows in data['rows']['row']:
+        tmp_list = []
         for key, value in rows.items():
-            if key[1:].lower() in list_marketdata_names:
+            if key[1:].lower() in stocks_fields:
                 if not value:
-                    tmp_marketdata_list.append(None)
+                    tmp_list.append(None)
                 elif value.isdigit():
-                    tmp_marketdata_list.append(int(value))
+                    tmp_list.append(int(value))
                 else:
                     try:
-                        tmp_marketdata_list.append(float(value))
+                        tmp_list.append(float(value))
                     except:
-                        tmp_marketdata_list.append(value)
-        list_marketdata.append(tmp_marketdata_list)
-    stocks_list = []
-    for value1, value2 in zip(list_securities, list_marketdata):
-        stocks_list.append(list(value1 + value2))
-    return stocks_list
-
-if __name__ == '__main__':
-    print(*get_stocks_list(), sep='\n')
+                        tmp_list.append(value)
+        result.append(tmp_list)
+    return result
 
 
+def get_stocks_list(stocks_fields1: list, stocks_fields2: list) -> list:
+    if 'secid' in stocks_fields1:
+        zip_result = zip(get_data_list(data_securities, stocks_fields1), get_data_list(data_marketdata, stocks_fields2))
+    else:
+        zip_result = zip(get_data_list(data_securities, stocks_fields2), get_data_list(data_marketdata, stocks_fields1))
+    result = []
+    for value1, value2 in zip_result:
+        result.append(list(value1 + value2))
+    return result
