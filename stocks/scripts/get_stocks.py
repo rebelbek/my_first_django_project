@@ -20,7 +20,7 @@ def get_data(url: dict):
     return data
 
 
-def get_data_for_all(data: list, stocks_fields: dict) -> dict:
+def get_data_for_all(data: list, stocks_fields: dict) -> list:
     result = []
     for rows in data['rows']['row']:
         tmp_dict= {}
@@ -40,19 +40,19 @@ def get_data_for_all(data: list, stocks_fields: dict) -> dict:
 
 
 def get_data_for_one(data: list, stocks_fields: dict) -> dict:
-     tmp_dict = {}
+     result = {}
      for key, value in data['rows']['row'].items():
          if key[1:].lower() in stocks_fields:
              if not value:
-                 tmp_dict[key[1:].lower()] = None
+                 result[key[1:].lower()] = None
              elif value.isdigit():
-                 tmp_dict[key[1:].lower()] = int(value)
+                 result[key[1:].lower()] = int(value)
              else:
                  try:
-                     tmp_dict[key[1:].lower()] = float(value)
+                     result[key[1:].lower()] = float(value)
                  except:
-                     tmp_dict[key[1:].lower()] = value
-     return tmp_dict
+                     result[key[1:].lower()] = value
+     return result
 
 
 def get_stocks_dict(stocks_fields: dict) -> dict:
