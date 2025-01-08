@@ -21,7 +21,8 @@
 **py_dd** и добавить следующие настройки:
 
 ```
-url = https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml
+url_stocks = https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml
+url_stock = https://iss.moex.com/iss/engines/stock/markets/shares/boards/{BOARDID}/securities/{TICKER}.xml
 db_name = имя_вашей_базы_данных
 db_user = имя_пользователя
 db_passw = пароль_от_базы_данных
@@ -29,7 +30,7 @@ db_passw = пароль_от_базы_данных
 
 Если вы используете ***SQLite*** в качестве базы данных, то вам
 нужно изменить переменную **DATABASE** в файле **settings.py**, 
-которая находится в папке py_dd на следующее:
+которая находится в каталоге **py_dd** на следующее:
 
 ```python
 DATABASES = {

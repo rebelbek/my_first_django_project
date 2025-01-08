@@ -8,7 +8,7 @@ class StockSecuritiesAdmin(admin.ModelAdmin):
     ordering = ['secid']
 
 class StockMarketdataAdmin(admin.ModelAdmin):
-    list_display = ['secid']
+    list_display = ['secid', 'last', 'value']
     list_per_page = 50
     ordering = ['secid']
 

@@ -6,9 +6,13 @@
     <meta charset="UTF-8">
     <title>{{stock.secname}}</title>
     <link rel="stylesheet" href="{% static 'stocks/css/stock_detail.css' %}">
+
 </head>
 <body>
-<h2>{{stock}}</h2>
+    <h2>{{stock}}</h2>
+    <form action="{% url 'stock_update' stock.secid %}">
+        <button class="update">Обновить данные</button>
+    </form>
 <main>
 <table class="table">
     <tr>
@@ -29,15 +33,13 @@
 </table>
 <article>
     <h2>Форма для изменения:</h2>
-    <form action="" method="post">
+    <form action="" method="post" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
-
-
             {{form}}
         </div>
 
-        <button type="submit">Сохранить</button>
+        <button type="submit" class="subm">Сохранить</button>
     </form>
 </article>
 </main>

@@ -36,6 +36,7 @@ class StockInfoSecurities(models.Model):
 
 class StockInfoMarketdata(models.Model):
     secid = models.CharField(max_length=10, unique=True)
+    boardid = models.CharField(max_length=40, null=True)
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)
