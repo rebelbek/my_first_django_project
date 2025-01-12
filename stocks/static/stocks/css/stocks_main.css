@@ -1,3 +1,13 @@
+body {
+margin: 20px;
+padding:10px;
+letter-spacing: 1px;
+background-image: url("/static/img/background.png");
+background-size: no-repeat;
+background-position: center;
+background-size: cover;
+}
+
 .table{
 	border: 1px solid #eee;
 	table-layout: fixed;
@@ -41,16 +51,6 @@
    box-shadow: #003CC5 0 0px 0px 40px inset;
 }
 
-body {
-margin: 20px;
-padding:10px;
-letter-spacing: 1px;
-background-image: url("/static/img/background.png");
-background-size: no-repeat;
-background-position: center;
-background-size: cover;
-}
-
 .back-to-top {
   position: fixed;
   bottom: 30px;
@@ -65,13 +65,6 @@ background-size: cover;
   z-index: 1000;
 }
 
-nav a {
-color: gold;
-font-size: 1.5rem;
-margin: 10px;
-}
 
-nav a:hover, ul a:active {
-color: #eca8b5;
-}
+
 

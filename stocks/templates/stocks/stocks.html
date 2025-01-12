@@ -1,6 +1,5 @@
-{% load static %}
-
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,9 +7,12 @@
     <link rel="stylesheet" href="{% static 'stocks/css/stocks_main.css' %}">
 </head>
 <body>
- <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
+{% include 'includes/navbar_top.html' %}
 <br>
-<form action="{% url 'stocks_update' %}">
+     <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
+<br>
+<form action="{% url 'stocks_update' %}" method="POST">
+    {% csrf_token %}
     <button class="btn-new">Обновить данные</button>
 </form>
 

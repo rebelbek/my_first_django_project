@@ -1,5 +1,7 @@
 body {
-letter-spacing: 0.7px;
+margin: 20px;
+padding:10px;
+letter-spacing: 1px;
 background-image: url("/static/img/background.png");
 background-size: no-repeat;
 background-position: center;
@@ -157,13 +159,5 @@ button:active {
  color: #aaff54;
 }
 
-nav a {
-color: gold;
-font-size: 1.5rem;
-margin: 10px;
-}
 
-nav a:hover, ul a:active {
-color: #eca8b5;
-}
 

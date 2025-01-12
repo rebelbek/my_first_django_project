@@ -1,0 +1,26 @@
+{% extends 'registration/base_user.html' %}
+
+{% block title %}
+Авторизация
+{% endblock %}
+
+{% block content %}
+		<form method="post">
+			{% csrf_token %}
+			<h1>Авторизация</h1>
+<!--			{{form}}-->
+			<div>
+				<input type="text" name="username" placeholder="Пользователь" required="" id="username" />
+			</div>
+			<div>
+				<input type="password" name="password" placeholder="Пароль" required="" id="password" />
+			</div>
+			<div>
+			    {{form.errors}}
+				<input type="submit" value="Войти" />
+<!--				<a href="#">Lost your password?</a>-->
+				<a href="{% url 'signup' %}">Регистрация</a>
+				<a href="/">Главная</a>
+			</div>
+		</form><!-- form -->
+{% endblock %}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+     body {
+      color: black;
+      text-align: center;
+      }
+    </style>
+  </head>
+<body>
+    <h1>Привет, {{ user.username|default:'Гость' }}</h1>
+    <p> Добро пожаловать !</p>
+    <div>
+      {% if user.is_authenticated %}
+          <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit">Выйти</button>
+          </form>
+      {% else %}
+          <a href="{% url 'signup' %}">Регистрация</a>
+          <a href="{% url 'login' %}">Войти</a>
+      {% endif %}
+  </div>
+  </body>
+</html>

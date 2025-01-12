@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'stocks',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/my_gallery/'
+
+LOGIN_REDIRECT_URL = 'cabinet'
+LOGOUT_REDIRECT_URL = 'login'

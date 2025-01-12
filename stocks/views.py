@@ -63,28 +63,32 @@ def stocks_search(request):
 
 
 def stocks_update(request):
-    StockInfoSecurities.objects.exclude(unchangeable=True).delete()
-    StockInfoMarketdata.objects.all().delete()
     stocks_fields_securities = get_stocks_dict(dict(StockInfoSecurities().__dict__.items()))
     stocks_fields_marketdata = get_stocks_dict(dict(StockInfoMarketdata().__dict__.items()))
-    # сохранить данные для таблицы StockInfoSecurities
-    unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all()]
+    # обновить данные для таблицы StockInfoSecurities
+    unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all() if item.unchangeable is True]
     for item in stocks_fields_securities:
         if item['secid'] not in unchangeable_stocks:
-            stock = StockInfoSecurities(**item)
-            stock.save()
+            try:
+                StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
+            except:
+                StockInfoSecurities.objects.create(**item)
         else:
             del item['shortname']
             del item['secname']
             StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
-    # сохранить данные для таблицы StockInfoMarketdata
+    # обновить данные для таблицы StockInfoMarketdata
     for item in stocks_fields_marketdata:
-        stock = StockInfoMarketdata(**item)
-        stock.save()
-    # связать таблицы
-    for item in StockInfoSecurities.objects.all():
-        item.marketdata = StockInfoMarketdata.objects.get(secid=f'{item.secid}')
-        item.save()
+        try:
+            StockInfoMarketdata.objects.filter(secid=item['secid']).update(**item)
+        except:
+            StockInfoMarketdata.objects.create(**item)
+    # связать таблицы у новых акций
+    new_stocks = [item for item in StockInfoSecurities.objects.all() if not item.marketdata]
+    if new_stocks:
+        for item in new_stocks:
+            item.marketdata = StockInfoMarketdata.objects.get(secid=f'{item.secid}')
+            item.save()
     redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)
 
@@ -101,11 +105,41 @@ def stock_update(request, secid: str):
     else:
         StockInfoSecurities.objects.filter(secid=secid).update(**stock_fields_securities)
     # обновить данные для таблицы StockInfoMarketdata
-    StockInfoMarketdata.objects.get(secid=secid).delete()
-    StockInfoMarketdata.objects.create(**stock_fields_marketdata)
+    StockInfoMarketdata.objects.filter(secid=secid).update(**stock_fields_marketdata)
     # связать таблицы
     stock = StockInfoSecurities.objects.get(secid=secid)
     stock.marketdata = StockInfoMarketdata.objects.get(secid=secid)
     stock.save()
     redirect_url = reverse('stock_detail', args=[secid])
     return HttpResponseRedirect(redirect_url)
+
+
+def stocks_delete(requests):
+    StockInfoSecurities.objects.exclude(unchangeable=True).delete()
+    StockInfoMarketdata.objects.all().delete()
+    redirect_url = reverse('stocks_main')
+    return HttpResponseRedirect(redirect_url)
+
+
+def stocks_download(requests):
+    stocks_fields_securities = get_stocks_dict(dict(StockInfoSecurities().__dict__.items()))
+    stocks_fields_marketdata = get_stocks_dict(dict(StockInfoMarketdata().__dict__.items()))
+    # сохранить данные для таблицы StockInfoSecurities
+    unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all()]
+    for item in stocks_fields_securities:
+        if item['secid'] not in unchangeable_stocks:
+            StockInfoSecurities.objects.create(**item)
+        else:
+            del item['shortname']
+            del item['secname']
+            StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
+    # сохранить данные для таблицы StockInfoMarketdata
+    for item in stocks_fields_marketdata:
+        StockInfoMarketdata.objects.create(**item)
+    # связать таблицы
+    for item in StockInfoSecurities.objects.all():
+        item.marketdata = StockInfoMarketdata.objects.get(secid=f'{item.secid}')
+        item.save()
+    redirect_url = reverse('stocks_main')
+    return HttpResponseRedirect(redirect_url)
+

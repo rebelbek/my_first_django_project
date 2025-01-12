@@ -1,6 +1,5 @@
-{% load static %}
-
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,8 +8,10 @@
 
 </head>
 <body>
+    {% include 'includes/navbar_top.html' %}
     <h2>{{stock}}</h2>
-    <form action="{% url 'stock_update' stock.secid %}">
+    <form action="{% url 'stock_update' stock.secid %}" method="POST">
+        {% csrf_token %}
         <button class="update">Обновить данные</button>
     </form>
 <main>
@@ -33,7 +34,7 @@
 </table>
 <article>
     <h2>Форма для изменения:</h2>
-    <form action="" method="post" class="change">
+    <form action="" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form}}

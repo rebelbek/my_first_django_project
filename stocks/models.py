@@ -49,3 +49,6 @@ class StockInfoMarketdata(models.Model):
 
     def __str__(self):
         return f'{self.secid}'
+
+
+# python3 manage.py shell_plus --print-sql

@@ -4,13 +4,12 @@ import requests # внешний модуль
 import xmltodict # внешний модуль
 
 # добавил путь для импорта скрипта который получает url из .env
-# и импортировал переменную из скрипта
+# и импортировал переменные из скрипта
 sys.path.append(os.path.join(os.getcwd(), '../..'))
 from env.get_from_env import url_stocks, url_stock
 
 
-def get_data(url: dict):
-    url = url
+def get_data(url) -> list[dict]:
     response = requests.get(url)
     xml = response.content
     xml_dict = xmltodict.parse(xml)
@@ -20,7 +19,7 @@ def get_data(url: dict):
     return data
 
 
-def get_data_for_all(data: list, stocks_fields: dict) -> list:
+def get_data_for_all(data: dict, stocks_fields: dict) -> list[dict]:
     result = []
     for rows in data['rows']['row']:
         tmp_dict= {}
@@ -39,7 +38,7 @@ def get_data_for_all(data: list, stocks_fields: dict) -> list:
     return result
 
 
-def get_data_for_one(data: list, stocks_fields: dict) -> dict:
+def get_data_for_one(data: dict, stocks_fields: dict) -> dict:
      result = {}
      for key, value in data['rows']['row'].items():
          if key[1:].lower() in stocks_fields:
