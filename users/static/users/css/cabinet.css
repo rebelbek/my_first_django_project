@@ -1,0 +1,130 @@
+body {
+margin: 20px;
+padding:10px;
+letter-spacing: 1px;
+background-image: url("/static/img/background.png");
+background-size: no-repeat;
+background-position: center;
+background-size: cover;
+}
+
+body {
+    margin: 0;
+    font-family: Sans-Serif;
+}
+
+h2{
+    width:30%;
+    margin: 40px auto 5px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.add {
+    margin: 1.5rem auto 5px;
+    width: 90%;
+    max-width: 40rem;
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: white;
+    box-shadow: 0 2px 8px #3ca3c1;
+}
+
+.btn {
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    border: 10px solid blue;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #320777;
+    border-color: #320777;
+}
+
+.form-style {
+    margin-bottom: 1rem;
+}
+
+.form-style input {
+    font: inherit;
+    padding: 0.25rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    display: block;
+    width: 20rem;
+}
+
+.form-style input:focus {
+    border-color: #1f0050;
+    background-color: #f4eeff;
+    outline: none;
+}
+
+.form-style label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.errorlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #ff2650
+}
+
+.errors input {
+    border-color: #aa1754;
+    background-color: #f4eeff;
+}
+
+.errors label{
+ color: #aaff54;
+}
+
+.exit {
+    border-radius: 30px;
+    color: white;
+    transition: .2s linear;
+    background: #30A8E6;
+    position: absolute;
+    top: 25px;
+    right: 50px;
+    padding: 10px 10px;
+}
+
+.exit:hover {
+   box-shadow: #1C85BB 0 0px 0px 40px inset;
+}
+
+.table{
+	border: 1px solid #eee;
+	table-layout: fixed;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+
+.table td{
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	text-align: left;
+}
+
+.table tbody tr:nth-child(odd){
+	background: #fff;
+}
+
+.table tbody tr:nth-child(even){
+	background: #F7F7F7;
+}

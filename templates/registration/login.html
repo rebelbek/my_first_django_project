@@ -8,7 +8,6 @@
 		<form method="post">
 			{% csrf_token %}
 			<h1>Авторизация</h1>
-<!--			{{form}}-->
 			<div>
 				<input type="text" name="username" placeholder="Пользователь" required="" id="username" />
 			</div>
@@ -22,5 +21,5 @@
 				<a href="{% url 'signup' %}">Регистрация</a>
 				<a href="/">Главная</a>
 			</div>
-		</form><!-- form -->
+		</form>
 {% endblock %}

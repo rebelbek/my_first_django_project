@@ -40,15 +40,15 @@ background-size: cover;
     border-radius: 30px;
     color: white;
     transition: .2s linear;
-    background: green;
+    background: #30A8E6;
     position: absolute;
-    top: 50px;
+    top: 25px;
     right: 50px;
     padding: 10px 10px;
 }
 
 .btn-new:hover {
-   box-shadow: #003CC5 0 0px 0px 40px inset;
+   box-shadow: #1C85BB 0 0px 0px 40px inset;
 }
 
 .back-to-top {

@@ -2,5 +2,9 @@
 <link rel="stylesheet" href="{% static 'css/navbar_top.css' %}">
 <ul class="navbar">
     <li><a href="/">Главная</a></li>
+    {% if user.is_active %}
+    <li><a href="/home/cabinet">Личный кабинет</a></li>
+    {% else %}
     <li><a href="/home/">Войти</a></li>
+    {% endif %}
 </ul>
