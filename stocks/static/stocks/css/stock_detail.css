@@ -128,7 +128,7 @@ button:active {
     border-radius: 4px;
     border: 1px solid #ccc;
     display: block;
-    width: 10rem;
+    width: 20rem;
 }
 
 .form-style input:focus {

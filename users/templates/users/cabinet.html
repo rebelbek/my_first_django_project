@@ -13,14 +13,14 @@
         <button class="exit" type="submit">Выйти</button>
     </form>
 
-    <h2>Добавьте сделку {{user.username}}</h2>
-    <form class="add" action="{% url 'add_deal' %}" method="post" class="change">
+    <h2>{{user.username|capfirst}} добавьте позицию: </h2>
+    <form class="add" action="{% url 'deal_add' %}" method="post" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form}}
         </div>
 
-        <button class="btn" type="submit" class="subm">Сохранить</button>
+        <button class="btn" type="submit" class="subm">Добавить</button>
     </form>
     <br><br>
     <table class="table">
@@ -34,13 +34,28 @@
         <tr>
             <td>{{forloop.counter}}</td>
             <td><b><a href = "{% url 'stock_detail' deal.secid %}">{{deal.secid}}</a></b></td>
-              <td><b>{{deal.stock.secname}}</b></td>
+            <td><b>{{deal.date|date:"d.m.Y"}}</b></td>
+            <td><b>{{deal.stock.secname}}</b></td>
             <td><b>{{deal.quantity}}</b></td>
             <td><b>{{deal.buy_price}}</b></td>
+            <td><b>{{deal.cost}}</b></td>
             <td><b>{{deal.stock.marketdata.last}}</b></td>
+            <td><b>{{deal.value}}</b></td>
+            {% if deal.profit > 0 %}
+            <td style="background-color: green"><b>{{deal.profit|floatformat:2}}</b></td>
+            {% else %}
+            <td style="background-color: red"><b>{{deal.profit|floatformat:2}}</b></td>
+            {% endif %}
+            <td><b><a href="{% url 'deal_delete' deal.id %}">X</a></b></td>
         </tr>
         {% endfor %}
     </table>
+
+<ul>
+<li><h3>Всего потрачено: {{agg.cost__sum|floatformat:2}}</h3></li>
+<li><h3>Стоимость всех акций: {{agg.value__sum|floatformat:2}}</h3></li>
+<li><h3>Прибыль: {{agg.profit__sum|floatformat:2}}</h3></li>
+</ul>
 
 </body>
 </html>
