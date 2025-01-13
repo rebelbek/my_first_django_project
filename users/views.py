@@ -8,7 +8,7 @@ from django.db.models import F, Value, Avg, Sum
 from .forms import DealForm
 from .models import UserDealInfo
 from stocks.models import StockInfoSecurities
-from datetime import date
+
 
 # Create your views here.
 

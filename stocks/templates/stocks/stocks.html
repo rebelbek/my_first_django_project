@@ -8,7 +8,8 @@
 </head>
 <body>
 {% include 'includes/navbar_top.html' %}
-<br>
+<br><br>
+    <p>Текущее время: {{current_time}}</p>
      <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
 <br>
 <form action="{% url 'stocks_update' %}" method="POST">
