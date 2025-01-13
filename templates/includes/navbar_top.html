@@ -3,8 +3,8 @@
 <ul class="navbar">
     <li><a href="/">Главная</a></li>
     {% if user.is_active %}
-    <li><a href="/home/cabinet">Личный кабинет</a></li>
+    <li><a href="{% url 'cabinet' %}">Личный кабинет</a></li>
     {% else %}
-    <li><a href="/home/">Войти</a></li>
+    <li><a href="{% url 'login' %}">Войти</a></li>
     {% endif %}
 </ul>

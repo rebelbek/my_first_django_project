@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
@@ -10,17 +10,12 @@ from .models import UserDealInfo
 from stocks.models import StockInfoSecurities
 from datetime import date
 
+# Create your views here.
+
 deals_fields_to_show = ['тикер', 'дата сделки', 'полное название', 'кол-во акций', 'цена покупки',
                         'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'удалить']
 
-
-# Create your views here.
-
-
-def home(request):
-    return render(request, 'users/home.html')
-
-
+@login_required
 def deal_add(request):
     if request.method == 'POST':
         form = DealForm(request.POST)
@@ -38,11 +33,13 @@ def deal_add(request):
     redirect_url = reverse('cabinet')
     return HttpResponseRedirect(redirect_url)
 
-
+@login_required
 def deal_delete(request, id: int):
     deal = UserDealInfo.objects.get(id=id)
-    deal.delete()
-
+    if deal.username == request.user.username:
+        deal.delete()
+    else:
+        raise Http404
     redirect_url = reverse('cabinet')
     return HttpResponseRedirect(redirect_url)
 
