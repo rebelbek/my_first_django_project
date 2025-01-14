@@ -14,8 +14,8 @@ stocks_fields_to_show = ['тикер', 'короткое название', 'п�
 
 
 def auto_update():
-    '''Автообновление акций каждые 10 секунд с 9:50 по 20:00'''
-    duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(20)
+    '''Автообновление акций каждые 10 секунд с 9:50 по 23:50'''
+    duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(23, 50)
     while duration:
         stocks_fields_securities = get_stocks_dict(dict(StockInfoSecurities().__dict__.items()))
         stocks_fields_marketdata = get_stocks_dict(dict(StockInfoMarketdata().__dict__.items()))

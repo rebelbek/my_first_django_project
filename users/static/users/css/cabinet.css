@@ -34,15 +34,15 @@ h2{
 
 .btn {
     cursor: pointer;
-    background-color: blue;
+    background-color: #30A8E6;
     color: white;
-    border: 10px solid blue;
+    border: 10px solid #30A8E6;
 }
 
 .btn:hover,
 .btn:active {
-    background-color: #320777;
-    border-color: #320777;
+    background-color: #1C85BB;
+    border-color: #1C85BB;
 }
 
 .form-style {

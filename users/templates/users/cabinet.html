@@ -33,14 +33,18 @@
         {% for deal in deals %}
         <tr>
             <td>{{forloop.counter}}</td>
-            <td><b><a href = "{% url 'stock_detail' deal.secid %}">{{deal.secid}}</a></b></td>
+            <td><b><a href = "{% url 'deal_detail' deal.id %}">{{deal.secid}}</a></b></td>
             <td><b>{{deal.date|date:"d.m.Y"}}</b></td>
-            <td><b>{{deal.stock.secname}}</b></td>
+            {% if deal.use_custom %}
+                <td><b>{{deal.custom_secname}}</b></td>
+            {% else %}
+                <td><b>{{deal.stock.secname}}</b></td>
+            {% endif %}
             <td><b>{{deal.quantity}}</b></td>
-            <td><b>{{deal.buy_price}}</b></td>
-            <td><b>{{deal.cost}}</b></td>
-            <td><b>{{deal.stock.marketdata.last}}</b></td>
-            <td><b>{{deal.value}}</b></td>
+            <td><b>{{deal.buy_price|floatformat:2}}</b></td>
+            <td><b>{{deal.cost|floatformat:2}}</b></td>
+            <td><b>{{deal.stock.marketdata.last|floatformat:2}}</b></td>
+            <td><b>{{deal.value|floatformat:2}}</b></td>
             {% if deal.profit > 0 %}
             <td style="background-color: green"><b>{{deal.profit|floatformat:2}}</b></td>
             {% else %}

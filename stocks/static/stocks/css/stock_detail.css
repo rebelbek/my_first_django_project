@@ -107,15 +107,15 @@ border-radius: 15px;
 
 .subm {
     cursor: pointer;
-    background-color: green;
+    background-color: #30A8E6;
     color: black;
-    border: 10px solid green;
+    border: 10px solid #30A8E6;
 }
 
 .subm:hover,
 button:active {
-    background-color: #320777;
-    border-color: #320777;
+    background-color: #1C85BB;
+    border-color: #1C85BB;
 }
 
 .form-style {
