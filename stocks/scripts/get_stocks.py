@@ -54,22 +54,20 @@ def get_data_for_one(data: dict, stocks_fields: dict) -> dict:
      return result
 
 
-def get_stocks_dict(stocks_fields: dict) -> dict:
+def get_stocks_dict(stocks_fields) -> dict:
     data = get_data(url_stocks)
-    if 'secname' in stocks_fields:
-        result = get_data_for_all(data[0], stocks_fields)
-    else:
-        result = get_data_for_all(data[1], stocks_fields)
+    result1 = get_data_for_all(data[0], stocks_fields)
+    result2 = get_data_for_all(data[1], stocks_fields)
+    result = [{**values1, **values2} for values1, values2 in zip(result1, result2)]
     return result
 
 
 def get_stock_dict(stocks_fields: dict) -> dict:
     url = url_stock.replace('{BOARDID}', stocks_fields['boardid']).replace('{TICKER}', stocks_fields['secid'])
     data = get_data(url)
-    if 'secname' in stocks_fields:
-        result = get_data_for_one(data[0], stocks_fields)
-    else:
-        result = get_data_for_one(data[1], stocks_fields)
+    result1 = get_data_for_one(data[0], stocks_fields)
+    result2 = get_data_for_one(data[1], stocks_fields)
+    result = [{**values1, **values2} for values1, values2 in zip(result1, result2)]
     return result
 
 # для проверок

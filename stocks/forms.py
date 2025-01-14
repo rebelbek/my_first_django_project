@@ -1,5 +1,5 @@
 from django import forms
-from .models import StockInfoSecurities
+from .models import StockInfo
 
 
 class SearchForm(forms.Form):
@@ -13,7 +13,7 @@ class SearchForm(forms.Form):
 
 class StockInfoForm(forms.ModelForm):
     class Meta:
-        model = StockInfoSecurities
+        model = StockInfo
         fields = ['shortname', 'secname']
         labels = {
             'shortname' : 'Короткое название',

@@ -4,7 +4,7 @@ from django.core.validators import MinLengthValidator
 
 # Create your models here.
 
-class StockInfoSecurities(models.Model):
+class StockInfo(models.Model):
     secid = models.CharField(max_length=10, unique=True)
     boardid = models.CharField(max_length=40)
     shortname = models.CharField(max_length=20, validators=[MinLengthValidator(3)], blank=False)
@@ -21,21 +21,6 @@ class StockInfoSecurities(models.Model):
     prevlegalcloseprice = models.FloatField()
     listlevel = models.IntegerField()
     settledate = models.DateField()
-    marketdata = models.OneToOneField('StockInfoMarketdata', on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.secname}'
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    def get_url(self):
-        return reverse('stock_detail', args=[self.secid])
-
-
-class StockInfoMarketdata(models.Model):
-    secid = models.CharField(max_length=10, unique=True)
-    boardid = models.CharField(max_length=40, null=True)
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)
@@ -47,7 +32,14 @@ class StockInfoMarketdata(models.Model):
     valtoday_usd = models.FloatField(null=True)
 
     def __str__(self):
-        return f'{self.secid}'
+        return f'{self.secname}'
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def get_url(self):
+        return reverse('stock_detail', args=[self.secid])
+
 
 
 # python3 manage.py shell_plus --print-sql
