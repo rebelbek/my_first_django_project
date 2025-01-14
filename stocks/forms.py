@@ -14,11 +14,10 @@ class SearchForm(forms.Form):
 class StockInfoForm(forms.ModelForm):
     class Meta:
         model = StockInfoSecurities
-        fields = ['shortname', 'secname', 'unchangeable']
+        fields = ['shortname', 'secname']
         labels = {
             'shortname' : 'Короткое название',
             'secname' : 'Полное название',
-            'unchangeable' : 'Не изменять при обновлении',
             }
         error_messages = {
             'shortname': {

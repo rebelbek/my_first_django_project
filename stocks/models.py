@@ -21,7 +21,6 @@ class StockInfoSecurities(models.Model):
     prevlegalcloseprice = models.FloatField()
     listlevel = models.IntegerField()
     settledate = models.DateField()
-    unchangeable = models.BooleanField(default=False)
     marketdata = models.OneToOneField('StockInfoMarketdata', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):

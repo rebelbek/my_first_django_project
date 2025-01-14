@@ -3,7 +3,7 @@ from .models import StockInfoSecurities, StockInfoMarketdata
 
 # Register your models here.
 class StockSecuritiesAdmin(admin.ModelAdmin):
-    list_display = ['secid','shortname','secname', 'lotsize', 'issuesize']
+    list_display = ['id', 'secid','shortname','secname', 'lotsize', 'issuesize']
     list_per_page = 50
     ordering = ['secid']
 

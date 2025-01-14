@@ -3,6 +3,7 @@ from datetime import datetime, time
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db import connection
 from .models import StockInfoSecurities, StockInfoMarketdata
 from .forms import SearchForm, StockInfoForm
 from .scripts.get_stocks import get_stocks_dict, get_stock_dict
@@ -20,17 +21,12 @@ def auto_update():
         stocks_fields_securities = get_stocks_dict(dict(StockInfoSecurities().__dict__.items()))
         stocks_fields_marketdata = get_stocks_dict(dict(StockInfoMarketdata().__dict__.items()))
         # обновить данные для таблицы StockInfoSecurities
-        unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all() if item.unchangeable is True]
+
         for item in stocks_fields_securities:
-            if item['secid'] not in unchangeable_stocks:
-                try:
-                    StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
-                except:
-                    StockInfoSecurities.objects.create(**item)
-            else:
-                del item['shortname']
-                del item['secname']
+            try:
                 StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
+            except:
+                StockInfoSecurities.objects.create(**item)
         # обновить данные для таблицы StockInfoMarketdata
         for item in stocks_fields_marketdata:
             try:
@@ -134,27 +130,18 @@ def stocks_update(request):
 def stock_update(request, secid: str):
     stock_fields_securities = get_stock_dict(dict(StockInfoSecurities.objects.get(secid=secid).__dict__.items()))
     stock_fields_marketdata = get_stock_dict(dict(StockInfoMarketdata.objects.get(secid=secid).__dict__.items()))
-    stock = StockInfoSecurities.objects.get(secid=secid)
     # обновить данные для таблицы StockInfoSecurities
-    if stock.unchangeable is True:
-        del stock_fields_securities['shortname']
-        del stock_fields_securities['secname']
-        StockInfoSecurities.objects.filter(secid=secid).update(**stock_fields_securities)
-    else:
-        StockInfoSecurities.objects.filter(secid=secid).update(**stock_fields_securities)
+    StockInfoSecurities.objects.filter(secid=secid).update(**stock_fields_securities)
     # обновить данные для таблицы StockInfoMarketdata
     StockInfoMarketdata.objects.filter(secid=secid).update(**stock_fields_marketdata)
-    # связать таблицы
-    stock = StockInfoSecurities.objects.get(secid=secid)
-    stock.marketdata = StockInfoMarketdata.objects.get(secid=secid)
-    stock.save()
     redirect_url = reverse('stock_detail', args=[secid])
     return HttpResponseRedirect(redirect_url)
 
 
 def stocks_delete(request):
-    StockInfoSecurities.objects.exclude(unchangeable=True).delete()
-    StockInfoMarketdata.objects.all().delete()
+    with (connection.cursor() as cursor):
+        cursor.execute("delete from stocks_stockinfosecurities")
+        cursor.execute("delete from stocks_stockinfomarketdata")
     redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)
 
@@ -163,14 +150,8 @@ def stocks_download(request):
     stocks_fields_securities = get_stocks_dict(dict(StockInfoSecurities().__dict__.items()))
     stocks_fields_marketdata = get_stocks_dict(dict(StockInfoMarketdata().__dict__.items()))
     # сохранить данные для таблицы StockInfoSecurities
-    unchangeable_stocks = [item.secid for item in StockInfoSecurities.objects.all()]
     for item in stocks_fields_securities:
-        if item['secid'] not in unchangeable_stocks:
-            StockInfoSecurities.objects.create(**item)
-        else:
-            del item['shortname']
-            del item['secname']
-            StockInfoSecurities.objects.filter(secid=item['secid']).update(**item)
+        StockInfoSecurities.objects.create(**item)
     # сохранить данные для таблицы StockInfoMarketdata
     for item in stocks_fields_marketdata:
         StockInfoMarketdata.objects.create(**item)
