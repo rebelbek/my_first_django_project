@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StockInfo
+from .models import Stocks
 
 # Register your models here.
 class StockInfoAdmin(admin.ModelAdmin):
@@ -7,4 +7,4 @@ class StockInfoAdmin(admin.ModelAdmin):
     list_per_page = 50
     ordering = ['secid']
 
-admin.site.register(StockInfo, StockInfoAdmin)
+admin.site.register(Stocks, StockInfoAdmin)

@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db import connection
-from .models import StockInfo
+from .models import Stocks
 from .forms import SearchForm, StockInfoForm
 from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
@@ -18,20 +18,20 @@ def auto_update():
     '''Автообновление акций каждые 10 секунд с 9:50 по 23:50'''
     duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(23, 50)
     while duration:
-        stocks_fields_securities = get_stocks_dict(dict(StockInfo().__dict__.items()))
+        stocks_fields_securities = get_stocks_dict(dict(Stocks().__dict__.items()))
 
         for item in stocks_fields_securities:
             try:
-                StockInfo.objects.filter(secid=item['secid']).update(**item)
+                Stocks.objects.filter(secid=item['secid']).update(**item)
             except:
-                StockInfo.objects.create(**item)
+                Stocks.objects.create(**item)
 
         t.sleep(10)  # модуль time as t
 
 
 def stocks_main(request):
     form = SearchForm()
-    stocks = StockInfo.objects.order_by('secid')
+    stocks = Stocks.objects.order_by('secid')
     stocks_count = stocks.count()
     context = {'stocks': stocks,
                'form': form,
@@ -42,7 +42,7 @@ def stocks_main(request):
 
 
 def stock_detail(request, secid: str):
-    stock = get_object_or_404(StockInfo, secid=secid)
+    stock = get_object_or_404(Stocks, secid=secid)
     if request.method == 'POST':
         form = StockInfoForm(request.POST, instance=stock)
         if form.is_valid():
@@ -62,9 +62,9 @@ def stocks_search(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         if form.cleaned_data['field'] == 'Secname':
-            stocks = StockInfo.objects.filter(secname__icontains=form.cleaned_data['input'])
+            stocks = Stocks.objects.filter(secname__icontains=form.cleaned_data['input'])
         elif form.cleaned_data['field'] == 'Secid':
-            stocks = StockInfo.objects.filter(secid__icontains=form.cleaned_data['input'])
+            stocks = Stocks.objects.filter(secid__icontains=form.cleaned_data['input'])
     else:
         redirect_url = reverse('main_stocks')
         return HttpResponseRedirect(redirect_url)
@@ -109,22 +109,22 @@ def stocks_update(request):
 
 
 def stock_update(request, secid: str):
-    stock_fields_securities = get_stock_dict(dict(StockInfo.objects.get(secid=secid).__dict__.items()))
-    StockInfo.objects.filter(secid=secid).update(**stock_fields_securities)
+    stock_fields_securities = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
+    Stocks.objects.filter(secid=secid).update(**stock_fields_securities)
     redirect_url = reverse('stock_detail', args=[secid])
     return HttpResponseRedirect(redirect_url)
 
 
 def stocks_delete(request):
     with (connection.cursor() as cursor):
-        cursor.execute("delete from stocks_stockinfo")
+        cursor.execute("delete from stocks_stocks")
     redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)
 
 
 def stocks_download(request):
-    stocks_fields_securities = get_stocks_dict(dict(StockInfo().__dict__.items()))
+    stocks_fields_securities = get_stocks_dict(dict(Stocks().__dict__.items()))
     for item in stocks_fields_securities:
-        StockInfo.objects.create(**item)
+        Stocks.objects.create(**item)
     redirect_url = reverse('stocks_main')
     return HttpResponseRedirect(redirect_url)

@@ -8,7 +8,7 @@ from django.db.models import F, Value, Avg, Sum
 from datetime import date
 from .forms import DealForm, DealInfoForm, AddStocksForm
 from .models import UserDealInfo
-from stocks.models import StockInfo
+from stocks.models import Stocks
 
 
 # Create your views here.
@@ -22,8 +22,8 @@ def deal_add(request):
         form = DealForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            stock = StockInfo.objects.get(secid=cd['secid'].upper())
-            deal = UserDealInfo(stock=stock,
+            stock = Stocks.objects.get(secid=cd['secid'].upper())
+            deal = UserDealInfo(st=stock,
                                 username=request.user.username,
                                 secid=cd['secid'].upper(),
                                 custom_secname = stock.secname,
@@ -67,7 +67,7 @@ def cabinet(request):
     form = DealForm()
     deals = UserDealInfo.objects.filter(username=request.user.username).annotate(
         cost=F('quantity') * F('buy_price'),
-        value=F('quantity') * F('stock__last'),
+        value=F('quantity') * F('st__last'),
         profit=F('value') - F('cost'),
     )
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
@@ -91,7 +91,7 @@ def deal_detail(request, id: int):
     else:
         form = DealInfoForm(instance=deal)
     values_list = list(deal.__dict__.items())[3:]
-    deal_stock = StockInfo.objects.get(secid=f'{deal.secid}')
+    deal_stock = Stocks.objects.get(secid=f'{deal.secid}')
     values_stock_list = list(deal_stock.__dict__.items())[3:]
     context = {'values_list': values_list,
                'values_stock_list': values_stock_list,
