@@ -16,6 +16,21 @@ form {
     color: #6464d2;
 }
 
+input[type="checkbox"] {
+  transform: scale(2);
+}
+
+.change {
+    margin: 1.5rem auto 5px;
+    width: 80%;
+    max-width: 60rem;
+    padding: 2rem;
+    border-radius: 10px;
+    font-size: 24px;
+    background-color: transparent;
+    box-shadow: 0 2px 8px #abb4fc;
+}
+
 h2{
     width:90%;
     color: #6464d2;
@@ -136,7 +151,7 @@ article {
     border-radius: 4px;
     border: 1px solid #ccc;
     display: block;
-    width: 30rem;
+    width: 20rem;
 }
 
 .form-style input:focus {

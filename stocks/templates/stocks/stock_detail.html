@@ -29,7 +29,6 @@
 </table>
 <article>
     <h2>Добавить позицию {{stock.secid}}:</h2>
-    <br>
     <form action="{% url 'deal_add' stock.secid %}" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">

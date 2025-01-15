@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <title>{{deal.secid}}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-
 </head>
 <body>
     {% include 'includes/navbar_top.html' %}
+    <br>
     <h2>{{deal}}</h2>
     <form action="{% url 'stock_update' deal.secid %}" method="POST">
         {% csrf_token %}
@@ -34,7 +34,6 @@
 </table>
 <article>
     <h2>Редактировать:</h2>
-    <br>
     <form action="" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
@@ -45,7 +44,6 @@
     </form>
     <br>
     <h2>Добавить акции:</h2>
-    <br>
     <form action="{% url 'stocks_add' deal.id %}" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
