@@ -1,3 +1,5 @@
+from importlib.metadata import pass_none
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse, reverse_lazy
@@ -6,8 +8,9 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
 from datetime import date
-from .forms import DealForm, DealInfoForm, AddStocksForm
+from .forms import AddStocksForm, DealInfoForm
 from .models import UserDealInfo
+from stocks.forms import DealForm
 from stocks.models import Stocks
 
 
@@ -17,15 +20,15 @@ deals_fields_to_show = ['тикер', 'дата сделки', 'полное н�
                         'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'X']
 
 @login_required
-def deal_add(request):
+def deal_add(request, secid: str):
     if request.method == 'POST':
         form = DealForm(request.POST)
         if form.is_valid():
+            stock = Stocks.objects.get(secid=secid)
             cd = form.cleaned_data
-            stock = Stocks.objects.get(secid=cd['secid'].upper())
             deal = UserDealInfo(st=stock,
                                 username=request.user.username,
-                                secid=cd['secid'].upper(),
+                                secid=secid,
                                 custom_secname = stock.secname,
                                 quantity=cd['quantity'],
                                 buy_price=cd['buy_price'],
@@ -54,12 +57,15 @@ def stocks_add(request, id: int):
 @login_required
 def deal_delete(request, id: int):
     deal = UserDealInfo.objects.get(id=id)
-    if deal.username == request.user.username:
-        deal.delete()
-    else:
+    if deal.username != request.user.username:
         raise Http404
-    redirect_url = reverse('cabinet')
-    return HttpResponseRedirect(redirect_url)
+    if request.method == 'POST':
+        deal.delete()
+        redirect_url = reverse('cabinet')
+        return HttpResponseRedirect(redirect_url)
+    else:
+        context = {'deal' : deal}
+    return render(request, 'users/deal_delete.html', context=context)
 
 
 @login_required

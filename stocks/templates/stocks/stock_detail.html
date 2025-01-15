@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{stock.secname}}</title>
-    <link rel="stylesheet" href="{% static 'stocks/css/stock_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
 </head>
 <body>
@@ -12,7 +12,7 @@
     <h2>{{stock}}</h2>
     <form action="{% url 'stock_update' stock.secid %}" method="POST">
         {% csrf_token %}
-        <button class="update">Обновить данные</button>
+        <button class="btn2">Обновить данные</button>
     </form>
 <main>
 <table class="table">
@@ -22,20 +22,20 @@
     </tr>
     {% for key, value in values_list %}
     <tr>
-        <td>{{key|title}}</td>
-        <td>{{value}}</td>
+        <td><b>{{key|title}}</b></td>
+        <td><b>{{value}}</b></td>
     {% endfor %}
     </tr>
 </table>
 <article>
-    <h2>Форма для изменения:</h2>
-    <form action="" method="POST" class="change">
+    <h2>Добавить позицию {{stock.secid}}:</h2>
+    <br>
+    <form action="{% url 'deal_add' stock.secid %}" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form}}
         </div>
-
-        <button type="submit" class="subm">Сохранить</button>
+        <button type="submit" class="btn">Добавить</button>
     </form>
 </article>
 </main>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Удалить {{deal.secid}}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<h3>Подтвердите удаление {{deal.custom_secname}}</h3>
+<table>
+    <tr>
+    <td><form action="{% url 'deal_delete' deal.id %}" method="POST" class="change">
+        {% csrf_token %}
+        <button type="submit" class="btn">Удалить</button>
+    </form></td>
+    <td><form action="{% url 'cabinet'%}" class="change">
+        {% csrf_token %}
+        <button type="submit" class="btn">Отмена</button>
+    </form></td>
+    </tr>
+</table>
+</body>
+</html>

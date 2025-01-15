@@ -1,0 +1,197 @@
+body {
+    margin: 20px;
+    padding:10px;
+    letter-spacing: 1px;
+    background-image: url("/static/img/background.png");
+    background-size: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+p{
+    color: #6464d2;
+}
+
+form {
+    color: #6464d2;
+}
+
+h2{
+    width:90%;
+    color: #6464d2;
+    font-size: 2rem;
+    -webkit-text-stroke: 0.5px black;
+    text-stroke: 1px #6b62ba;
+    margin: 20px auto 5px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+h3{
+    color: #6464d2;
+    font-size: 1.2rem;
+    margin: 20px auto 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.btn {
+    text-decoration: none; /*убираем подчеркивание текста ссылок*/
+    background:#30A8E6; /*добавляем фон к пункту меню*/
+    color:#fff; /*меняем цвет ссылок*/
+    padding:10px; /*добавляем отступ*/
+    font-family: arial; /*меняем шрифт*/
+    border-radius:4px; /*добавляем скругление*/
+    -moz-transition: all 0.3s 0.01s ease; /*делаем плавный переход*/
+    -o-transition: all 0.3s 0.01s ease;
+    -webkit-transition: all 0.3s 0.01s ease;
+}
+
+.btn:hover {
+    background:#1C85BB;/*добавляем эффект при наведении*/
+}
+
+.btn2 {
+    text-decoration: none; /*убираем подчеркивание текста ссылок*/
+    background:#30A8E6; /*добавляем фон к пункту меню*/
+    color:#fff; /*меняем цвет ссылок*/
+    padding:10px; /*добавляем отступ*/
+    font-family: arial; /*меняем шрифт*/
+    border-radius:4px; /*добавляем скругление*/
+    -moz-transition: all 0.3s 0.01s ease; /*делаем плавный переход*/
+    -o-transition: all 0.3s 0.01s ease;
+    -webkit-transition: all 0.3s 0.01s ease;
+    position: absolute;
+    top: 25px;
+    right: 40px;
+}
+
+.btn2:hover {
+    background:#1C85BB;/*добавляем эффект при наведении*/
+}
+
+.btn3 {
+  box-shadow: 0 5px 15px 0 rgba(11, 99, 246, 1);
+  transition: 0.5s;
+  background:#30A8E6;
+}
+
+.btn3:hover {
+  transform: translate(0,-3px);
+  box-shadow: 0 20px 40px 0 rgba(11, 99, 246, 1);
+  background:#1C85BB;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 3%;
+    font-size: 50px;
+    color: green;
+    background: transparent;
+    box-shadow: 0 2px 8px #3ca3c1;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+main {
+    display: flex;
+    padding: 20px;
+    justify-content; flex-start;
+    height: auto;
+    margin: 2%;
+}
+
+aside {
+    color: #6464d2;
+    -webkit-text-stroke: 0.3px black;
+    margin: 1px;
+    padding:5px;
+    width: 40%;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px #3ca3c1;
+}
+
+article {
+    color: #6464d2;
+    background-color: transparent;
+    padding: 20px;
+    width: 40%;
+    margin-left: 10%;
+    font-size: 1.8rem;
+    border-radius: 15px;
+}
+
+.form-style {
+    margin-bottom: 1rem;
+}
+
+.form-style input {
+    font: inherit;
+    padding: 0.25rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    display: block;
+    width: 30rem;
+}
+
+.form-style input:focus {
+    border-color: #1f0050;
+    background-color: #f4eeff;
+    outline: none;
+}
+
+.form-style label {
+    color: #6464d2;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.errorlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #ff2650
+}
+
+.errors input {
+    border-color: #aa1754;
+    background-color: #f4eeff;
+}
+
+.errors label{
+    color: #aaff54;
+}
+
+.table{
+	border: 1px solid #eee;
+	table-layout: fixed;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+
+.table td{
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	text-align: left;
+}
+
+.table tbody tr:nth-child(odd){
+	background: #fff;
+}
+
+.table tbody tr:nth-child(even){
+	background: #F7F7F7;
+}

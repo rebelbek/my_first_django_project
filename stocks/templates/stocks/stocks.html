@@ -4,51 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Акции мосбиржи</title>
-    <link rel="stylesheet" href="{% static 'stocks/css/stocks_main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
 {% include 'includes/navbar_top.html' %}
 <br><br>
     <p>Текущее время: {{current_time}}</p>
      <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
-<br>
+
 <form action="{% url 'stocks_update' %}" method="POST">
     {% csrf_token %}
-    <button class="btn-new">Обновить данные</button>
+    <button class="btn2">Обновить данные</button>
 </form>
-
-<form action="{% url 'stocks_search' %}" method="GET">
-    {{form.field.label_tag}}
-    {{form.field}}
-    {{form.input.label_tag}}<br>
-    {{form.input}}
-    <button type="submit">Поиск</button>
-</form>
-
-<form action="{% url 'stocks_main' %}">
-    <button type="submit">Сброс</button>
-</form>
+<table>
+    <tr>
+    <td><form action="{% url 'stocks_search' %}" method="GET">
+        {{form.input.label_tag}}
+        {{form.input}}
+        <button type="submit" class="btn3">Поиск</button>
+    </form></td>
+    <td><form action="{% url 'stocks_main' %}">
+        <button type="submit" class="btn3">Сброс</button>
+    </form></td>
+    </tr>
+</table>
 <p>Всего акций: {{stocks_count}}</p>
-
-    <table class="table">
-        <tr>
-            <td><b>№</b></td>
-            {% for item in stocks_fields %}
-            <td><b>{{item|capfirst}}</b></td>
-            {% endfor %}
-        </tr>
-        {% for stock in stocks %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td><b><a href = "{{stock.get_url}}">{{stock.secid}}</a></b></td>
-            <td><b>{{stock.shortname}}</b></td>
-            <td><b>{{stock.secname}}</b></td>
-            <td><b>{{stock.issuesize}}</b></td>
-            <td><b>{{stock.lotsize}}</b></td>
-            <td><b>{{stock.last}}</b></td>
-        </tr>
+<table class="table">
+    <tr>
+        <td><b>№</b></td>
+        {% for item in stocks_fields %}
+        <td><b>{{item|capfirst}}</b></td>
         {% endfor %}
-    </table>
+    </tr>
+    {% for stock in stocks %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td><b><a href = "{{stock.get_url}}">{{stock.secid}}</a></b></td>
+        <td><b>{{stock.shortname}}</b></td>
+        <td><b>{{stock.secname}}</b></td>
+        <td><b>{{stock.issuesize}}</b></td>
+        <td><b>{{stock.lotsize}}</b></td>
+        <td><b>{{stock.last}}</b></td>
+    </tr>
+    {% endfor %}
+</table>
 
 </body>
 </html>

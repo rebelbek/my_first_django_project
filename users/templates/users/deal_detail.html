@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{deal.secid}}</title>
-    <link rel="stylesheet" href="{% static 'stocks/css/stock_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
 </head>
 <body>
@@ -12,7 +12,7 @@
     <h2>{{deal}}</h2>
     <form action="{% url 'stock_update' deal.secid %}" method="POST">
         {% csrf_token %}
-        <button class="update">Обновить данные</button>
+        <button class="btn2">Обновить данные</button>
     </form>
 <main>
 <table class="table">
@@ -33,26 +33,29 @@
     </tr>
 </table>
 <article>
-    <h2>Форма для изменения:</h2>
+    <h2>Редактировать:</h2>
+    <br>
     <form action="" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form}}
         </div>
 
-        <button type="submit" class="subm">Сохранить</button>
+        <button type="submit" class="btn">Сохранить</button>
     </form>
+    <br>
     <h2>Добавить акции:</h2>
+    <br>
     <form action="{% url 'stocks_add' deal.id %}" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form1.quantity.label_tag}}
             {{form1.quantity}}
-            {{form1.buy_price.label_tag}}<br>
+            {{form1.buy_price.label_tag}}
             {{form1.buy_price}}
         </div>
 
-        <button type="submit" class="subm">Добавить</button>
+        <button type="submit" class="btn">Добавить</button>
     </form>
 </article>
 </main>
