@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
 from django.contrib.auth.models import User
 from datetime import date
-from .forms import AddStocksForm, DealInfoForm
+from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
@@ -85,20 +85,27 @@ def deal_detail(request, id: int):
     deal = get_object_or_404(DealInfo, id=id)
     if request.method == 'POST':
         form = DealInfoForm(request.POST, instance=deal)
+        form_set = DealSetBorderForm(request.POST, instance=deal)
         if form.is_valid():
             form.save()
             redirect_url = reverse(f'deal_detail', args=[id])
             return HttpResponseRedirect(redirect_url)
+        if form_set.is_valid():
+            form_set.save()
+            redirect_url = reverse(f'deal_detail', args=[id])
+            return HttpResponseRedirect(redirect_url)
     else:
         form = DealInfoForm(instance=deal)
-    form1 = AddStocksForm()
+        form_set = DealSetBorderForm(instance=deal)
+    form_add = AddStocksForm()
     values_list = list(deal.__dict__.items())[4:]
     values_stock_list = list(deal.stock.__dict__.items())[2:]
     context = {'values_list': values_list,
                'values_stock_list': values_stock_list,
                'deal': deal,
                'form': form,
-               'form1': form1}
+               'form_set': form_set,
+               'form_add': form_add}
     return render(request, 'users/deal_detail.html', context=context)
 
 

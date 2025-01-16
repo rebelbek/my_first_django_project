@@ -42,15 +42,23 @@
 
         <button type="submit" class="btn">Сохранить</button>
     </form>
-    <br>
+    <h2>Для оповещения:</h2>
+    <form action="" method="POST" class="change">
+        {% csrf_token %}
+        <div class="form-style {% if field.errors %} errors {% endif %}">
+            {{form_set}}
+        </div>
+
+        <button type="submit" class="btn">Сохранить</button>
+    </form>
     <h2>Добавить акции:</h2>
     <form action="{% url 'stocks_add' deal.id %}" method="POST" class="change">
         {% csrf_token %}
         <div class="form-style {% if field.errors %} errors {% endif %}">
-            {{form1.quantity.label_tag}}
-            {{form1.quantity}}
-            {{form1.buy_price.label_tag}}
-            {{form1.buy_price}}
+            {{form_add.quantity.label_tag}}
+            {{form_add.quantity}}
+            {{form_add.buy_price.label_tag}}
+            {{form_add.buy_price}}
         </div>
 
         <button type="submit" class="btn">Добавить</button>

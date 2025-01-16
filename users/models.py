@@ -11,6 +11,8 @@ class DealInfo(models.Model):
     quantity = models.IntegerField()
     buy_price = models.IntegerField()
     date = models.DateField()
+    upper_border = models.FloatField(default=None, null=True)
+    lower_border = models.FloatField(default=None, null=True)
     custom_secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)
     use_custom = models.BooleanField(default=False)
 
