@@ -83,7 +83,6 @@ def cabinet(request):
 @login_required
 def deal_detail(request, id: int):
     deal = get_object_or_404(DealInfo, id=id)
-
     if request.method == 'POST':
         form = DealInfoForm(request.POST, instance=deal)
         if form.is_valid():

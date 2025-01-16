@@ -20,13 +20,26 @@ def auto_update():
     '''Автообновление акций каждые 60 секунд с 9:50 по 23:50'''
     duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(23, 50)
     while duration:
-        stocks_fields_securities = get_stocks_dict(dict(Stocks().__dict__.items()))
+        stocks_fields_securities = get_stocks_dict(list(Stocks().__dict__.keys()))
         for item in stocks_fields_securities:
             try:
                 Stocks.objects.filter(secid=item['secid']).update(**item)
             except:
                 Stocks.objects.create(**item)
         t.sleep(60)  # модуль time as t
+
+
+def stocks_update(request):
+    auto_update()
+    redirect_url = reverse('stocks_main')
+    return HttpResponseRedirect(redirect_url)
+
+
+def stock_update(request, secid: str):
+    stock_fields = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
+    Stocks.objects.filter(secid=secid).update(**stock_fields)
+    redirect_url = reverse('stock_detail', args=[secid])
+    return HttpResponseRedirect(redirect_url)
 
 
 def stocks_main(request):
@@ -66,19 +79,6 @@ def stocks_search(request):
                'stocks_count': stocks_count,
                'stocks_fields': stocks_fields_to_show}
     return render(request, 'stocks/stocks.html', context=context)
-
-
-def stocks_update(request):
-    auto_update()
-    redirect_url = reverse('stocks_main')
-    return HttpResponseRedirect(redirect_url)
-
-
-def stock_update(request, secid: str):
-    stock_fields_securities = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
-    Stocks.objects.filter(secid=secid).update(**stock_fields_securities)
-    redirect_url = reverse('stock_detail', args=[secid])
-    return HttpResponseRedirect(redirect_url)
 
 
 @login_required

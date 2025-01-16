@@ -19,7 +19,7 @@ def get_data(url) -> list[dict]:
     return data
 
 
-def get_data_for_all(data: dict, stocks_fields: dict) -> list[dict]:
+def get_data_for_all(data: dict, stocks_fields: list) -> list[dict]:
     result = []
     for rows in data['rows']['row']:
         tmp_dict= {}
@@ -38,10 +38,10 @@ def get_data_for_all(data: dict, stocks_fields: dict) -> list[dict]:
     return result
 
 
-def get_data_for_one(data: dict, stocks_fields: dict) -> dict:
+def get_data_for_one(data: dict, stock_fields: list) -> dict:
      result = {}
      for key, value in data['rows']['row'].items():
-         if key[1:].lower() in stocks_fields:
+         if key[1:].lower() in stock_fields:
              if not value:
                  result[key[1:].lower()] = None
              elif value.isdigit():
@@ -62,12 +62,13 @@ def get_stocks_dict(stocks_fields) -> dict:
     return result
 
 
-def get_stock_dict(stocks_fields: dict) -> dict:
-    url = url_stock.replace('{BOARDID}', stocks_fields['boardid']).replace('{TICKER}', stocks_fields['secid'])
+def get_stock_dict(stock_fields: dict) -> dict:
+    url = url_stock.replace('{BOARDID}', stock_fields['boardid']).replace('{TICKER}', stock_fields['secid'])
     data = get_data(url)
-    result1 = get_data_for_one(data[0], stocks_fields)
-    result2 = get_data_for_one(data[1], stocks_fields)
-    result = [{**values1, **values2} for values1, values2 in zip(result1, result2)]
+    result1 = get_data_for_one(data[0], stock_fields)
+    result2 = get_data_for_one(data[1], stock_fields)
+    # result = [{values1, values2} for values1, values2 in zip(result1, result2)]
+    result = {**result1, **result2}
     return result
 
 # для проверок
