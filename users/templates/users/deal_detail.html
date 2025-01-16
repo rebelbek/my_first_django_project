@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{deal.secid}}</title>
+    <title>{{deal.stock.secid}}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
     {% include 'includes/navbar_top.html' %}
     <br>
     <h2>{{deal}}</h2>
-    <form action="{% url 'stock_update' deal.secid %}" method="POST">
+    <form action="{% url 'stock_update' deal.stock.secid %}" method="POST">
         {% csrf_token %}
         <button class="btn2">Обновить данные</button>
     </form>

@@ -10,11 +10,11 @@
 <h3>Подтвердите удаление {{deal.custom_secname}}</h3>
 <table>
     <tr>
-    <td><form action="{% url 'deal_delete' deal.id %}" method="POST" class="change">
+    <td><form action="{% url 'deal_delete' deal.id %}" method="POST" class="">
         {% csrf_token %}
         <button type="submit" class="btn">Удалить</button>
     </form></td>
-    <td><form action="{% url 'cabinet'%}" class="change">
+    <td><form action="{% url 'cabinet'%}" class="">
         {% csrf_token %}
         <button type="submit" class="btn">Отмена</button>
     </form></td>

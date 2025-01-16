@@ -1,18 +1,19 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.contrib.auth.models import User
 from stocks.models import Stocks
 
 # Create your models here.
 
-class UserDealInfo(models.Model):
-    username = models.CharField(max_length=40)
-    secid = models.CharField(max_length=10)
-    custom_secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)
+class DealInfo(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    stock = models.ForeignKey(Stocks, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
     buy_price = models.IntegerField()
     date = models.DateField()
+    custom_secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)
     use_custom = models.BooleanField(default=False)
-    st = models.ForeignKey(Stocks, on_delete=models.CASCADE, default=None, null=True, blank=True)
+
 
     def __str__(self):
         return self.custom_secname

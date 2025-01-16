@@ -17,18 +17,16 @@ stocks_fields_to_show = ['тикер', 'короткое название', 'п�
 
 
 def auto_update():
-    '''Автообновление акций каждые 10 секунд с 9:50 по 23:50'''
+    '''Автообновление акций каждые 60 секунд с 9:50 по 23:50'''
     duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(23, 50)
     while duration:
         stocks_fields_securities = get_stocks_dict(dict(Stocks().__dict__.items()))
-
         for item in stocks_fields_securities:
             try:
                 Stocks.objects.filter(secid=item['secid']).update(**item)
             except:
                 Stocks.objects.create(**item)
-
-        t.sleep(10)  # модуль time as t
+        t.sleep(60)  # модуль time as t
 
 
 def stocks_main(request):

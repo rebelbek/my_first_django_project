@@ -1,5 +1,5 @@
 from django import forms
-from.models import UserDealInfo
+from.models import DealInfo
 
 
 # class DealForm(forms.Form):
@@ -10,12 +10,12 @@ from.models import UserDealInfo
 
 class AddStocksForm(forms.Form):
     quantity = forms.IntegerField(label='Количество акций')
-    buy_price = forms.FloatField(label='Средняя цена покупки')
+    buy_price = forms.FloatField(label='Цена покупки 1 акции')
 
 
 class DealInfoForm(forms.ModelForm):
     class Meta:
-        model = UserDealInfo
+        model = DealInfo
         fields = ['custom_secname', 'use_custom', 'quantity', 'buy_price']
         labels = {
             'custom_secname' : 'Название',
