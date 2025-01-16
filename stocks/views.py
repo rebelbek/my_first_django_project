@@ -31,14 +31,16 @@ def auto_update():
 
 def stocks_update(request):
     auto_update()
-    redirect_url = reverse('stocks_main')
+    # redirect_url = reverse('stocks_main')
+    redirect_url = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(redirect_url)
 
 
 def stock_update(request, secid: str):
     stock_fields = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
     Stocks.objects.filter(secid=secid).update(**stock_fields)
-    redirect_url = reverse('stock_detail', args=[secid])
+    # redirect_url = reverse('stock_detail', args=[secid])
+    redirect_url = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(redirect_url)
 
 

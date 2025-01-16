@@ -1,16 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
-from django.contrib.auth.models import User
-from datetime import date
+from datetime import date, datetime
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
-from .models import DealInfo
+from .models import DealInfo, NotificationUser
 from stocks.forms import DealForm
 from stocks.models import Stocks
+import time
 
 # Create your views here.
 
@@ -44,7 +44,7 @@ def stocks_add(request, id: int):
         if form.is_valid():
             cd = form.cleaned_data
             deal.buy_price = ((deal.buy_price * deal.quantity) +
-                                (cd['buy_price'] * cd['quantity'])) / (deal.quantity + cd['quantity'])
+                              (cd['buy_price'] * cd['quantity'])) / (deal.quantity + cd['quantity'])
             deal.quantity += cd['quantity']
             deal.save()
     redirect_url = reverse('deal_detail', args=[id])
@@ -59,7 +59,7 @@ def deal_delete(request, id: int):
         redirect_url = reverse('cabinet')
         return HttpResponseRedirect(redirect_url)
     else:
-        context = {'deal' : deal}
+        context = {'deal': deal}
     return render(request, 'users/deal_delete.html', context=context)
 
 
@@ -72,9 +72,11 @@ def cabinet(request):
         value=F('quantity') * F('stock__last'),
         profit=F('value') - F('cost'),
     )
+    notifications = user.notificationuser_set.all()
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
     context = {'form': form,
                'deals': deals,
+               'notifications': notifications,
                'agg': agg,
                'deals_fields': deals_fields_to_show}
     return render(request, 'users/cabinet.html', context=context)
@@ -109,9 +111,66 @@ def deal_detail(request, id: int):
     return render(request, 'users/deal_detail.html', context=context)
 
 
+def notifications(request):
+    user = request.user
+    notifications = user.notificationuser_set.all()
+    context = {'notifications': notifications,}
+    return render(request, 'users/notifications.html', context=context)
+
+
+def notifications_delete(request):
+    user = request.user
+    user.notificationuser_set.all().delete()
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)
+
+
+def notification_delete(request, id: int):
+    user = request.user
+    notification = user.notificationuser_set.get(id = id)
+    notification.delete()
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)
+
+
+def notification_read(request, id: int):
+    user = request.user
+    notification = user.notificationuser_set.get(id=id)
+    notification.delivered = True
+    notification.save()
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)
+
+
 class SignUp(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
 
+def check_border_auto():
+    while True:
+        for deal in DealInfo.objects.all():
+            if deal.upper_border:
+                if deal.stock.last >= deal.upper_border:
+                    notification = NotificationUser(user=deal.user,
+                                                    text=f'Достигнута верхняя граница {deal.upper_border} для позиции {deal.custom_secname}',
+                                                    date=datetime.now())
+                    deal.upper_border = None
+                    deal.save()
+                    notification.save()
+            if deal.lower_border:
+                if deal.stock.last <= deal.lower_border:
+                    notification = NotificationUser(user=deal.user,
+                                                    text=f'Достигнута нижняя граница {deal.lower_border} для позиции {deal.custom_secname}',
+                                                    date=datetime.now())
+                    deal.lower_border = None
+                    deal.save()
+                    notification.save()
+        time.sleep(10)
+
+
+def check_border(request):
+    check_border_auto()
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)

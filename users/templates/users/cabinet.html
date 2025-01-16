@@ -12,18 +12,36 @@
         {% csrf_token %}
         <button class="btn2" type="submit">Выйти</button>
     </form>
-    <br><br><br><br>
-    <ul>
-        <li><h3>Всего потрачено: {{agg.cost__sum|floatformat:2}}</h3></li>
-        <li><h3>Стоимость всех акций: {{agg.value__sum|floatformat:2}}</h3></li>
-        <li><h3>Прибыль: {{agg.profit__sum|floatformat:2}}</h3></li>
-    </ul>
+    <br><br>
+    {% if user.is_superuser %}
+    <form action="{% url 'check_border' %}" method="GET">
+        <button class="btn" type="submit">Проверить границы</button>
+    </form>
+    {% endif %}
+    <br><br>
+    {% if notifications %}
+        {% for notificate in notifications %}
+            {% if not notificate.delivered %}
+            <li>{{notificate.text}}
+                <form action="{% url 'notification_read' notificate.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn3">Прочитано</button>
+                </form>
+            </li>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
     <h3>Чтобы добавить позицию, перейдите в тикер акции на <a href="/">главной</a> странице</h3>
     <table class="table">
         <tr>
             <td><b>№</b></td>
             {% for item in deals_fields %}
-            <td><b>{{item|capfirst}}</b></td>
+                {% if item == 'полное название' %}
+                    <td style="width: 25%;"><b>{{item|capfirst}}</b></td>
+                {% else %}
+                    <td><b>{{item|capfirst}}</b></td>
+                {% endif %}
             {% endfor %}
         </tr>
         {% for deal in deals %}
@@ -51,5 +69,10 @@
         {% endfor %}
     </table>
 
+    <ul>
+        <li><h3>Всего потрачено: {{agg.cost__sum|floatformat:2}}</h3></li>
+        <li><h3>Стоимость всех акций: {{agg.value__sum|floatformat:2}}</h3></li>
+        <li><h3>Прибыль: {{agg.profit__sum|floatformat:2}}</h3></li>
+    </ul>
 </body>
 </html>
