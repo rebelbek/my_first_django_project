@@ -10,7 +10,7 @@ class DealInfo(models.Model):
     stock = models.ForeignKey(Stocks, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
     buy_price = models.IntegerField()
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True)
     upper_border = models.FloatField(default=None, null=True)
     lower_border = models.FloatField(default=None, null=True)
     custom_secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)

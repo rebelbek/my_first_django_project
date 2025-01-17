@@ -12,10 +12,6 @@
     <p>Текущее время: {{current_time}}</p>
      <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
 
-<form action="{% url 'stocks_update' %}" method="POST">
-    {% csrf_token %}
-    <button class="btn2">Обновить данные</button>
-</form>
 <table>
     <tr>
     <td><form action="{% url 'stocks_search' %}" method="GET">

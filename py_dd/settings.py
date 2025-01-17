@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'django_extensions',
     'stocks',
     'users',
@@ -146,3 +147,8 @@ MEDIA_URL = '/my_gallery/'
 
 LOGIN_REDIRECT_URL = 'cabinet'
 LOGOUT_REDIRECT_URL = 'login'
+
+CRONJOBS = [
+    ('* 9-23 * * 1-5', 'stocks.cron.update_stocks'),
+    ('* 9-23 * * 1-5', 'stocks.cron.check_border')
+]

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 
 def notifications(request):
     user = request.user
-    all_notifications = user.notificationuser_set.all()
+    all_notifications = user.notificationuser_set.order_by('-date')
     context = {'notifications': all_notifications,}
     return render(request, 'notifications/notifications.html', context=context)
 

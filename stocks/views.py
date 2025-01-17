@@ -1,5 +1,4 @@
-import time as t
-from datetime import datetime, time
+from datetime import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -16,30 +15,9 @@ stocks_fields_to_show = ['тикер', 'короткое название', 'п�
                          'цена 1 акции']
 
 
-def auto_update():
-    '''Автообновление акций каждые 60 секунд с 9:50 по 23:50'''
-    duration = datetime.now().time() > time(9, 50) and datetime.now().time() < time(23, 50)
-    while duration:
-        stocks_fields_securities = get_stocks_dict(list(Stocks().__dict__.keys()))
-        for item in stocks_fields_securities:
-            try:
-                Stocks.objects.filter(secid=item['secid']).update(**item)
-            except:
-                Stocks.objects.create(**item)
-        t.sleep(60)  # модуль time as t
-
-
-def stocks_update(request):
-    auto_update()
-    # redirect_url = reverse('stocks_main')
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
-
-
 def stock_update(request, secid: str):
     stock_fields = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
     Stocks.objects.filter(secid=secid).update(**stock_fields)
-    # redirect_url = reverse('stock_detail', args=[secid])
     redirect_url = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(redirect_url)
 
@@ -95,8 +73,8 @@ def stocks_delete(request):
 @login_required
 def stocks_download(request):
     if request.user.is_superuser:
-        stocks_fields_securities = get_stocks_dict(dict(Stocks().__dict__.items()))
-        for item in stocks_fields_securities:
+        stocks_fields = get_stocks_dict(dict(Stocks().__dict__.items()))
+        for item in stocks_fields:
             Stocks.objects.create(**item)
         redirect_url = reverse('stocks_main')
         return HttpResponseRedirect(redirect_url)

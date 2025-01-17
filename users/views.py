@@ -5,13 +5,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
-from datetime import date, datetime
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
-from notifications.models import NotificationUser
-import time
 
 # Create your views here.
 
@@ -30,8 +27,7 @@ def deal_add(request, secid: str):
                             stock=stock,
                             quantity=cd['quantity'],
                             buy_price=cd['buy_price'],
-                            custom_secname=stock.secname,
-                            date=date.today())
+                            custom_secname=stock.secname)
             deal.save()
     redirect_url = reverse('cabinet')
     return HttpResponseRedirect(redirect_url)
@@ -121,31 +117,3 @@ class SignUp(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
-
-
-def check_border_auto():
-    while True:
-        for deal in DealInfo.objects.all():
-            if deal.upper_border:
-                if deal.stock.last >= deal.upper_border:
-                    notification = NotificationUser(user=deal.user,
-                                                    text=f'Достигнута верхняя граница {deal.upper_border} для позиции {deal.custom_secname}',
-                                                    date=datetime.now())
-                    deal.upper_border = None
-                    deal.save()
-                    notification.save()
-            if deal.lower_border:
-                if deal.stock.last <= deal.lower_border:
-                    notification = NotificationUser(user=deal.user,
-                                                    text=f'Достигнута нижняя граница {deal.lower_border} для позиции {deal.custom_secname}',
-                                                    date=datetime.now())
-                    deal.lower_border = None
-                    deal.save()
-                    notification.save()
-        time.sleep(10)
-
-
-def check_border(request):
-    check_border_auto()
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)

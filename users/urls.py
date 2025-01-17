@@ -8,5 +8,4 @@ urlpatterns = [
     path('deal-add/<str:secid>', views.deal_add, name='deal_add'),
     path('stocks-add/<int:id>', views.stocks_add, name='stocks_add'),
     path('deal-delete/<int:id>', views.deal_delete, name='deal_delete'),
-    path('check-border', views.check_border, name='check_border'),
     ]

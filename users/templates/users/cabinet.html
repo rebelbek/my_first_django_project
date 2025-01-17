@@ -13,12 +13,7 @@
         <button class="btn2" type="submit">Выйти</button>
     </form>
     <br><br>
-    {% if user.is_superuser %}
-    <form action="{% url 'check_border' %}" method="GET">
-        <button class="btn" type="submit">Проверить границы</button>
-    </form>
-    {% endif %}
-    <br>
+
     {% if new_notification %}
         <h3 style="color: red">У вас есть непрочитанные уведомления !</h3>
     {% endif %}
@@ -28,7 +23,7 @@
             <td><b>№</b></td>
             {% for item in deals_fields %}
                 {% if item == 'полное название' %}
-                    <td style="width: 25%;"><b>{{item|capfirst}}</b></td>
+                    <td style="width: 20%;"><b>{{item|capfirst}}</b></td>
                 {% else %}
                     <td><b>{{item|capfirst}}</b></td>
                 {% endif %}
