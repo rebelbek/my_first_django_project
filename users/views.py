@@ -7,9 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
 from datetime import date, datetime
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
-from .models import DealInfo, NotificationUser
+from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
+from notifications.models import NotificationUser
 import time
 
 # Create your views here.
@@ -73,10 +74,15 @@ def cabinet(request):
         profit=F('value') - F('cost'),
     )
     notifications = user.notificationuser_set.all()
+    new_notification = False
+    for notif in notifications:
+        if notif.delivered is False:
+            new_notification = True
+            break
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
     context = {'form': form,
                'deals': deals,
-               'notifications': notifications,
+               'new_notification': new_notification,
                'agg': agg,
                'deals_fields': deals_fields_to_show}
     return render(request, 'users/cabinet.html', context=context)
@@ -109,37 +115,6 @@ def deal_detail(request, id: int):
                'form_set': form_set,
                'form_add': form_add}
     return render(request, 'users/deal_detail.html', context=context)
-
-
-def notifications(request):
-    user = request.user
-    notifications = user.notificationuser_set.all()
-    context = {'notifications': notifications,}
-    return render(request, 'users/notifications.html', context=context)
-
-
-def notifications_delete(request):
-    user = request.user
-    user.notificationuser_set.all().delete()
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
-
-
-def notification_delete(request, id: int):
-    user = request.user
-    notification = user.notificationuser_set.get(id = id)
-    notification.delete()
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
-
-
-def notification_read(request, id: int):
-    user = request.user
-    notification = user.notificationuser_set.get(id=id)
-    notification.delivered = True
-    notification.save()
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
 
 
 class SignUp(CreateView):

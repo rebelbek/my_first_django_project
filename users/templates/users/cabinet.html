@@ -18,20 +18,10 @@
         <button class="btn" type="submit">Проверить границы</button>
     </form>
     {% endif %}
-    <br><br>
-    {% if notifications %}
-        {% for notificate in notifications %}
-            {% if not notificate.delivered %}
-            <li>{{notificate.text}}
-                <form action="{% url 'notification_read' notificate.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn3">Прочитано</button>
-                </form>
-            </li>
-            {% endif %}
-        {% endfor %}
+    <br>
+    {% if new_notification %}
+        <h3 style="color: red">У вас есть непрочитанные уведомления !</h3>
     {% endif %}
-
     <h3>Чтобы добавить позицию, перейдите в тикер акции на <a href="/">главной</a> странице</h3>
     <table class="table">
         <tr>

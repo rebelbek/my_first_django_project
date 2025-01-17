@@ -4,7 +4,7 @@
     <li><a href="/">Главная</a></li>
     {% if user.is_active %}
     <li><a href="{% url 'cabinet' %}">Личный кабинет</a></li>
-    <li><a href="{% url 'notifications' %}">Оповещения</a></li>
+    <li><a href="{% url 'notifications' %}">Уведомления</a></li>
         {% if user.is_superuser %}
             <li><a href="{% url 'stocks_delete' %}">Очистить</a></li>
             <li><a href="{% url 'stocks_download' %}">Загрузить</a></li>

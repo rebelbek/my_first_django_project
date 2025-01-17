@@ -20,11 +20,3 @@ class DealInfo(models.Model):
         return self.custom_secname
 
 
-class NotificationUser(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
-    date = models.DateTimeField(default=None, null=True)
-    delivered = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'Оповещение для {self.user}, id = {self.id}'
