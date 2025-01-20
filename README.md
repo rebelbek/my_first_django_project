@@ -7,6 +7,7 @@
 
 * django
 * django-extensions
+* django-crontab
 * requests
 * xmltodict
 * python-dotenv

@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .models import Stocks
 from .forms import SearchForm, DealForm
-from .scripts.get_stocks import get_stocks_dict, get_stock_dict
+from .scripts.get_stocks import get_stocks_dict
 
 # Create your views here.
 
@@ -16,8 +16,7 @@ stocks_fields_to_show = ['тикер', 'короткое название', 'п�
 
 
 def stock_update(request, secid: str):
-    stock_fields = get_stock_dict(dict(Stocks.objects.get(secid=secid).__dict__.items()))
-    Stocks.objects.filter(secid=secid).update(**stock_fields)
+    Stocks.update_one(secid=secid)
     redirect_url = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(redirect_url)
 
@@ -73,8 +72,6 @@ def stocks_delete(request):
 @login_required
 def stocks_download(request):
     if request.user.is_superuser:
-        stocks_fields = get_stocks_dict(dict(Stocks().__dict__.items()))
-        for item in stocks_fields:
-            Stocks.objects.create(**item)
+        Stocks.download()
         redirect_url = reverse('stocks_main')
         return HttpResponseRedirect(redirect_url)

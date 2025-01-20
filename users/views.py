@@ -69,12 +69,7 @@ def cabinet(request):
         value=F('quantity') * F('stock__last'),
         profit=F('value') - F('cost'),
     )
-    notifications = user.notificationuser_set.all()
-    new_notification = False
-    for notif in notifications:
-        if notif.delivered is False:
-            new_notification = True
-            break
+    new_notification = user.new_notifications()
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
     context = {'form': form,
                'deals': deals,

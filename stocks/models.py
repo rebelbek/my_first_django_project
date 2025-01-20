@@ -1,9 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MinLengthValidator
+from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
 # Create your models here.
-
 
 class Stocks(models.Model):
     secid = models.CharField(max_length=10, unique=True)
@@ -37,5 +37,25 @@ class Stocks(models.Model):
 
     def get_url(self):
         return reverse('stock_detail', args=[self.secid])
+
+    @classmethod
+    def download(cls):
+        stocks_fields = get_stocks_dict(dict(cls.__dict__.items()))
+        for item in stocks_fields:
+            cls.objects.create(**item)
+
+    @classmethod
+    def update_all(cls):
+        stocks_fields = get_stocks_dict(list(cls().__dict__.keys()))
+        for item in stocks_fields:
+            try:
+                cls.objects.filter(secid=item['secid']).update(**item)
+            except:
+                cls.objects.create(**item)
+
+    @classmethod
+    def update_one(cls, secid):
+        stock_fields = get_stock_dict(dict(cls.objects.get(secid=secid).__dict__.items()))
+        cls.objects.filter(secid=secid).update(**stock_fields)
 
 # python3 manage.py shell_plus --print-sql

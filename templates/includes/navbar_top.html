@@ -3,11 +3,15 @@
 <ul class="navbar">
     <li><a href="/">Главная</a></li>
     {% if user.is_active %}
-    <li><a href="{% url 'cabinet' %}">Личный кабинет</a></li>
-    <li><a href="{% url 'notifications' %}">Уведомления</a></li>
+        <li><a href="{% url 'cabinet' %}">Личный кабинет</a></li>
+        {% if user.new_notifications %}
+            <li><a style="background: green" href="{% url 'notifications' %}">Уведомления</a></li>
+        {% else %}
+            <li><a href="{% url 'notifications' %}">Уведомления</a></li>
+        {% endif %}
         {% if user.is_superuser %}
-            <li><a href="{% url 'stocks_delete' %}">Очистить</a></li>
-            <li><a href="{% url 'stocks_download' %}">Загрузить</a></li>
+        <li><a href="{% url 'stocks_delete' %}">Очистить</a></li>
+        <li><a href="{% url 'stocks_download' %}">Загрузить</a></li>
         {% endif %}
     {% else %}
     <li><a href="{% url 'login' %}">Войти</a></li>
