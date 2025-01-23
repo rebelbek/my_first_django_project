@@ -5,10 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
+from django.forms.models import model_to_dict
+from django.http import HttpResponse
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
+from stocks.scripts.make_reports import write_to_pdf
 
 # Create your views here.
 
@@ -112,3 +115,37 @@ class SignUp(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+
+def reports(request):
+    return render(request, 'users/reports.html')
+
+
+def get_reports_pdf(request, model: str):
+    dict_values = []
+    if model == 'stocks':
+        for stock in Stocks.objects.order_by('secid'):
+            dict_values.append(model_to_dict(stock))
+        file, filename = write_to_pdf(dict_values, model)
+    if model == 'deals':
+        deals = DealInfo.objects.all().annotate(
+            cost=F('quantity') * F('buy_price'),
+            value=F('quantity') * F('stock__last'),
+            profit=F('value') - F('cost'),
+            )
+        for deal in deals:
+            # agg = deal.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
+            dct = {'username': deal.user.username,
+                   'secid': deal.stock.secid,
+                   'cost': deal.quantity * deal.buy_price,
+                   'value': deal.quantity * deal.stock.last,
+                   'profit': (deal.quantity * deal.stock.last) - (deal.quantity * deal.buy_price),
+            }
+            dict_values.append({**model_to_dict(deal), **dct})
+        file, filename = write_to_pdf(dict_values, model)
+    f = open(f'reports/pdf/{filename}', 'rb')
+    # return FileResponse(file, as_attachment=True, filename=filename)
+    response = HttpResponse(f.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    f.close()
+    return response

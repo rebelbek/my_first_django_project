@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .models import Stocks
 from .forms import SearchForm, DealForm
-from .scripts.get_stocks import get_stocks_dict
+
 
 # Create your views here.
 
@@ -75,3 +75,6 @@ def stocks_download(request):
         Stocks.download()
         redirect_url = reverse('stocks_main')
         return HttpResponseRedirect(redirect_url)
+
+
+

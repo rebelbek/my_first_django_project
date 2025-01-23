@@ -12,6 +12,7 @@
         {% if user.is_superuser %}
         <li><a href="{% url 'stocks_delete' %}">Очистить</a></li>
         <li><a href="{% url 'stocks_download' %}">Загрузить</a></li>
+        <li><a href="{% url 'reports' %}">Отчеты</a></li>
         {% endif %}
     {% else %}
     <li><a href="{% url 'login' %}">Войти</a></li>

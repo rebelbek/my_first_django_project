@@ -8,4 +8,6 @@ urlpatterns = [
     path('deal-add/<str:secid>', views.deal_add, name='deal_add'),
     path('stocks-add/<int:id>', views.stocks_add, name='stocks_add'),
     path('deal-delete/<int:id>', views.deal_delete, name='deal_delete'),
+    path('reports', views.reports, name='reports'),
+    path('get-reports-pdf/<str:model>', views.get_reports_pdf, name='get_reports_pdf'),
     ]

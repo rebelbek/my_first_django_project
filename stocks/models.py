@@ -46,7 +46,7 @@ class Stocks(models.Model):
 
     @classmethod
     def update_all(cls):
-        stocks_fields = get_stocks_dict(list(cls().__dict__.keys()))
+        stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         for item in stocks_fields:
             try:
                 cls.objects.filter(secid=item['secid']).update(**item)

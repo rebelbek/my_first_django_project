@@ -67,7 +67,6 @@ def get_stock_dict(stock_fields: dict) -> dict:
     data = get_data(url)
     result1 = get_data_for_one(data[0], stock_fields)
     result2 = get_data_for_one(data[1], stock_fields)
-    # result = [{values1, values2} for values1, values2 in zip(result1, result2)]
     result = {**result1, **result2}
     return result
 
