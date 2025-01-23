@@ -1,11 +1,12 @@
 from weasyprint import HTML
+import csv
 from datetime import datetime
 
 date_today = datetime.today().strftime('%d-%m-%Y')
 
-stocks_content_fields = ['№', 'тикер', 'полное название', 'количество акций',
+stocks_content_fields = ['№', 'тикер', 'полное название', 'кол-во акций',
                          'размер лота', 'цена 1 акции']
-deals_content_fields = ['№', 'пользователь', 'тикер', 'количество акций',
+deals_content_fields = ['№', 'пользователь', 'тикер', 'кол-во акций',
                         'стоимость', 'потрачено', 'прибыль']
 
 def get_stocks_fields(dict_values: list[dict]) -> list[str]:
@@ -54,17 +55,41 @@ def get_content_html_fields(content_fields: list) -> str:
     return f"<tr> {' '.join(fields_lst)} </tr>"
 
 
-def write_to_pdf(dict_values: dict, model: str):
+def get_pdf_file(dict_values: dict, model: str, format_file: str):
+    filename = f'{model}_{date_today}.{format_file}'
     if model == 'stocks':
         content_fields = get_content_html_fields(stocks_content_fields)
         stocks_fields = get_html_fields(get_stocks_fields(dict_values))
-        filename = f'stocks_{date_today}.pdf'
     else:
         content_fields = get_content_html_fields(deals_content_fields)
         stocks_fields = get_html_fields(get_deals_fields(dict_values))
-        filename = f'deals_{date_today}.pdf'
+
     html = HTML(string=f'''<table> {content_fields} {' '.join(stocks_fields)} </table>''')
-    file = html.write_pdf(f'reports/pdf/{filename}')
+    file = html.write_pdf(f'reports/{format_file}/{filename}')
+    return file
+
+
+def get_csv_file(dict_values: dict, model: str, format_file: str):
+    filename = f'{model}_{date_today}.{format_file}'
+    with open(f'reports/{format_file}/{filename}', "w", newline="") as file:
+        filewriter = csv.writer(file)
+        if model == 'stocks':
+            filewriter.writerow(stocks_content_fields[1:])
+            for stock in get_stocks_fields(dict_values):
+                filewriter.writerow(stock)
+        else:
+            filewriter.writerow(deals_content_fields[1:])
+            for stock in get_deals_fields(dict_values):
+                filewriter.writerow(stock)
+    return file
+
+
+def write_to_file(dict_values: dict, model: str, format_file: str):
+    filename = f'{model}_{date_today}.{format_file}'
+    if format_file == 'pdf':
+        file = get_pdf_file(dict_values, model, format_file)
+    if format_file == 'csv':
+        file = get_csv_file(dict_values, model, format_file)
     result = (file, filename)
     return result
 

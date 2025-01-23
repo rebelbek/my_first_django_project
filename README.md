@@ -10,6 +10,7 @@
 * django-crontab
 * requests
 * xmltodict
+* weasyprint
 * python-dotenv
 * psycopg2-binary
 

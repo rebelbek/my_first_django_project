@@ -11,7 +11,7 @@ from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
-from stocks.scripts.make_reports import write_to_pdf
+from stocks.scripts.make_reports import write_to_file
 
 # Create your views here.
 
@@ -121,12 +121,12 @@ def reports(request):
     return render(request, 'users/reports.html')
 
 
-def get_reports_pdf(request, model: str):
+def get_reports(request, model: str, format_file: str):
     dict_values = []
     if model == 'stocks':
         for stock in Stocks.objects.order_by('secid'):
             dict_values.append(model_to_dict(stock))
-        file, filename = write_to_pdf(dict_values, model)
+        file, filename = write_to_file(dict_values, model, format_file)
     if model == 'deals':
         deals = DealInfo.objects.all().annotate(
             cost=F('quantity') * F('buy_price'),
@@ -142,10 +142,13 @@ def get_reports_pdf(request, model: str):
                    'profit': (deal.quantity * deal.stock.last) - (deal.quantity * deal.buy_price),
             }
             dict_values.append({**model_to_dict(deal), **dct})
-        file, filename = write_to_pdf(dict_values, model)
-    f = open(f'reports/pdf/{filename}', 'rb')
+        file, filename = write_to_file(dict_values, model, format_file)
+    f = open(f'reports/{format_file}/{filename}', 'rb')
     # return FileResponse(file, as_attachment=True, filename=filename)
-    response = HttpResponse(f.read(), content_type='application/pdf')
+    if format_file == 'pdf':
+        response = HttpResponse(f.read(), content_type='application/pdf')
+    if format_file == 'csv':
+        response = HttpResponse(f.read(), content_type='application/csv')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     f.close()
     return response
