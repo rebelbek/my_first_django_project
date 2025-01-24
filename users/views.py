@@ -124,31 +124,33 @@ def reports(request):
 def get_reports(request, model: str, format_file: str):
     dict_values = []
     if model == 'stocks':
-        for stock in Stocks.objects.order_by('secid'):
-            dict_values.append(model_to_dict(stock))
+        dict_values = list(Stocks.objects.order_by('secid').values('secid', 'secname', 'issuesize', 'lotsize', 'last'))
         file, filename = write_to_file(dict_values, model, format_file)
     if model == 'deals':
-        deals = DealInfo.objects.all().annotate(
+        deals = request.user.dealinfo_set.all().annotate(
             cost=F('quantity') * F('buy_price'),
             value=F('quantity') * F('stock__last'),
             profit=F('value') - F('cost'),
             )
         for deal in deals:
-            # agg = deal.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
-            dct = {'username': deal.user.username,
-                   'secid': deal.stock.secid,
+            dct = {'secid': deal.stock.secid,
                    'cost': deal.quantity * deal.buy_price,
                    'value': deal.quantity * deal.stock.last,
                    'profit': (deal.quantity * deal.stock.last) - (deal.quantity * deal.buy_price),
             }
             dict_values.append({**model_to_dict(deal), **dct})
-        file, filename = write_to_file(dict_values, model, format_file)
+        agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
+        file, filename = write_to_file(dict_values, model, format_file, agg)
     f = open(f'reports/{format_file}/{filename}', 'rb')
     # return FileResponse(file, as_attachment=True, filename=filename)
     if format_file == 'pdf':
         response = HttpResponse(f.read(), content_type='application/pdf')
     if format_file == 'csv':
         response = HttpResponse(f.read(), content_type='application/csv')
+    if format_file == 'html':
+        response = HttpResponse(f.read(), content_type='application/html')
+    if format_file == 'xlsx':
+        response = HttpResponse(f.read(), content_type='application/xlsx')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     f.close()
     return response

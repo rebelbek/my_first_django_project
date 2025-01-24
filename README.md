@@ -11,6 +11,7 @@
 * requests
 * xmltodict
 * weasyprint
+* openpyxl
 * python-dotenv
 * psycopg2-binary
 
