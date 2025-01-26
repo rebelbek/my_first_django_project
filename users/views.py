@@ -6,12 +6,12 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
 from django.forms.models import model_to_dict
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from stocks.forms import DealForm
 from stocks.models import Stocks
-from stocks.scripts.make_reports import write_to_file
+from stocks.scripts.make_reports import ReportsMaker
 
 # Create your views here.
 
@@ -117,15 +117,19 @@ class SignUp(CreateView):
     template_name = "registration/signup.html"
 
 
+@login_required
 def reports(request):
     return render(request, 'users/reports.html')
 
 
+@login_required
 def get_reports(request, model: str, format_file: str):
+    if model not in ['stocks', 'deals'] and format_file not in ['html', 'pdf', 'csv', 'xlsx']:
+        return Http404
     dict_values = []
     if model == 'stocks':
         dict_values = list(Stocks.objects.order_by('secid').values('secid', 'secname', 'issuesize', 'lotsize', 'last'))
-        file, filename = write_to_file(dict_values, model, format_file)
+        file, filename = ReportsMaker(dict_values, model, format_file).write_to_file()
     if model == 'deals':
         deals = request.user.dealinfo_set.all().annotate(
             cost=F('quantity') * F('buy_price'),
@@ -139,18 +143,11 @@ def get_reports(request, model: str, format_file: str):
                    'profit': (deal.quantity * deal.stock.last) - (deal.quantity * deal.buy_price),
             }
             dict_values.append({**model_to_dict(deal), **dct})
-        agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
-        file, filename = write_to_file(dict_values, model, format_file, agg)
+        additional = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
+        file, filename = ReportsMaker(dict_values, model, format_file, additional).write_to_file()
     f = open(f'reports/{format_file}/{filename}', 'rb')
     # return FileResponse(file, as_attachment=True, filename=filename)
-    if format_file == 'pdf':
-        response = HttpResponse(f.read(), content_type='application/pdf')
-    if format_file == 'csv':
-        response = HttpResponse(f.read(), content_type='application/csv')
-    if format_file == 'html':
-        response = HttpResponse(f.read(), content_type='application/html')
-    if format_file == 'xlsx':
-        response = HttpResponse(f.read(), content_type='application/xlsx')
+    response = HttpResponse(f.read(), content_type=f'application/{format_file}')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     f.close()
     return response

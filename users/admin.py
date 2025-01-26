@@ -1,7 +1,10 @@
 from django.contrib import admin
-from .models import DealInfo
+from .models import DealInfo, User
 
 # Register your models here.
+
+class UserAdmin(admin.ModelAdmin):
+    pass
 
 class UserDealAdmin(admin.ModelAdmin):
     list_display = ['id', 'date']
@@ -10,3 +13,4 @@ class UserDealAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DealInfo, UserDealAdmin)
+admin.site.register(User, UserAdmin)
