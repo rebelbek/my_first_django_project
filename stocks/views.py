@@ -23,7 +23,7 @@ def stock_update(request, secid: str):
 
 def stocks_main(request):
     form = SearchForm()
-    stocks = Stocks.objects.order_by('secid')
+    stocks = Stocks.objects.all()
     stocks_count = stocks.count()
     context = {'stocks': stocks,
                'form': form,

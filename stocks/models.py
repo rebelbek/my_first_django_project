@@ -32,6 +32,9 @@ class Stocks(models.Model):
     valtoday = models.FloatField(null=True)
     valtoday_usd = models.FloatField(null=True)
 
+    class Meta:
+        ordering = ['secid']
+
     def __str__(self):
         return f'{self.secname}'
 
@@ -41,17 +44,13 @@ class Stocks(models.Model):
     @classmethod
     def download(cls):
         stocks_fields = get_stocks_dict(dict(cls.__dict__.items()))
-        for item in stocks_fields:
-            cls.objects.create(**item)
+        cls.objects.bulk_create(cls(**item) for item in stocks_fields)
 
     @classmethod
     def update_all(cls):
         stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         for item in stocks_fields:
-            try:
-                cls.objects.filter(secid=item['secid']).update(**item)
-            except:
-                cls.objects.create(**item)
+            cls.objects.update_or_create(secid=item['secid'], defaults=item)
 
     @classmethod
     def update_one(cls, secid):
