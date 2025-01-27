@@ -5,7 +5,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Value, Avg, Sum
-from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
@@ -126,28 +125,26 @@ def reports(request):
 def get_reports(request, model: str, format_file: str):
     if model not in ['stocks', 'deals'] and format_file not in ['html', 'pdf', 'csv', 'xlsx']:
         return Http404
-    dict_values = []
+    stocks_content_fields = ['№', 'Тикер', 'Полное название', 'Кол-во акций',
+                             'Размер лота', 'Цена 1 акции']
+    deals_content_fields = ['№', 'Тикер', 'Кол-во акций', 'Цена покупки',
+                            'Потрачено', 'Стоимость', 'Прибыль']
     if model == 'stocks':
-        dict_values = list(Stocks.objects.order_by('secid').values('secid', 'secname', 'issuesize', 'lotsize', 'last'))
-        file, filename = ReportsMaker(dict_values, model, format_file).write_to_file()
+        values = list(Stocks.objects.order_by('secid').values_list('secid', 'secname', 'issuesize', 'lotsize', 'last'))
+        filename = ReportsMaker(values, stocks_content_fields, model, format_file).write_to_file()
     if model == 'deals':
         deals = request.user.dealinfo_set.all().annotate(
+            secid=F('stock__secid'),
             cost=F('quantity') * F('buy_price'),
             value=F('quantity') * F('stock__last'),
             profit=F('value') - F('cost'),
-            )
-        for deal in deals:
-            dct = {'secid': deal.stock.secid,
-                   'cost': deal.quantity * deal.buy_price,
-                   'value': deal.quantity * deal.stock.last,
-                   'profit': (deal.quantity * deal.stock.last) - (deal.quantity * deal.buy_price),
-            }
-            dict_values.append({**model_to_dict(deal), **dct})
+            ).values_list('secid', 'quantity', 'buy_price', 'cost', 'value', 'profit')
+        values = [[round(i, 2) if isinstance(i, float) else i for i in deal] for deal in deals]
         additional = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
-        file, filename = ReportsMaker(dict_values, model, format_file, additional).write_to_file()
-    f = open(f'reports/{format_file}/{filename}', 'rb')
+        filename = ReportsMaker(values, deals_content_fields, model, format_file, additional).write_to_file()
+    file = open(f'reports/{format_file}/{filename}', 'rb')
     # return FileResponse(file, as_attachment=True, filename=filename)
-    response = HttpResponse(f.read(), content_type=f'application/{format_file}')
+    response = HttpResponse(file.read(), content_type=f'application/{format_file}')
     response['Content-Disposition'] = f'attachment; filename={filename}'
-    f.close()
+    file.close()
     return response
