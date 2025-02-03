@@ -30,7 +30,7 @@ class DealInfo(models.Model):
 
     @classmethod
     def check_borders(cls):
-        for deal in cls.objects.all():
+        for deal in (cls.objects.filter(upper_border='True') | cls.objects.filter(lower_border='True')):
             if deal.upper_border:
                 if deal.stock.last >= deal.upper_border:
                     notification = NotificationUser(user=deal.user,

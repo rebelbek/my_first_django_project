@@ -1,13 +1,13 @@
 {% extends 'registration/base_user.html' %}
 
 {% block title %}
-Авторизация
+Аутентификация
 {% endblock %}
 
 {% block content %}
 		<form method="post">
 			{% csrf_token %}
-			<h1>Авторизация</h1>
+			<h1>Аутентификация</h1>
 			<div>
 				<input type="text" name="username" placeholder="Пользователь" required="" id="username" />
 			</div>

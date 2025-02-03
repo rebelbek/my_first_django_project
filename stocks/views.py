@@ -8,17 +8,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Stocks
 from .forms import SearchForm, DealForm
 
-
 # Create your views here.
 
 stocks_fields_to_show = ['тикер', 'короткое название', 'полное название', 'количество акций', 'размер лота',
                          'цена 1 акции']
-
-
-def stock_update(request, secid: str):
-    Stocks.update_one(secid=secid)
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
 
 
 def stocks_main(request):
@@ -46,9 +39,9 @@ def stock_detail(request, secid: str):
 def stocks_search(request):
     form = SearchForm(request.GET)
     if form.is_valid():
-            stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
-                                           Q(shortname__icontains=form.cleaned_data['input']) |
-                                           Q(secname__icontains=form.cleaned_data['input']))
+        stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
+                                       Q(shortname__icontains=form.cleaned_data['input']) |
+                                       Q(secname__icontains=form.cleaned_data['input']))
     else:
         redirect_url = reverse('main_stocks')
         return HttpResponseRedirect(redirect_url)
@@ -77,4 +70,7 @@ def stocks_download(request):
         return HttpResponseRedirect(redirect_url)
 
 
-
+def stock_update(request, secid: str):
+    Stocks.update_one(secid=secid)
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)

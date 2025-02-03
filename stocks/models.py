@@ -43,7 +43,7 @@ class Stocks(models.Model):
 
     @classmethod
     def download(cls):
-        stocks_fields = get_stocks_dict(dict(cls.__dict__.items()))
+        stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         cls.objects.bulk_create(cls(**item) for item in stocks_fields)
 
     @classmethod

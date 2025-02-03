@@ -1,19 +1,21 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Value, Avg, Sum
+from django.db.models import F, Sum
 from django.http import HttpResponse, Http404
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
+from datetime import datetime
 from stocks.forms import DealForm
 from stocks.models import Stocks
 from stocks.scripts.make_reports import ReportsMaker
 
 # Create your views here.
 
+date_today = datetime.today().strftime('%d-%m-%Y')
 deals_fields_to_show = ['тикер', 'дата сделки', 'полное название', 'кол-во акций', 'цена покупки',
                         'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'X']
 
@@ -111,7 +113,7 @@ def deal_detail(request, id: int):
 
 
 class SignUp(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
@@ -125,13 +127,15 @@ def reports(request):
 def get_reports(request, model: str, format_file: str):
     if model not in ['stocks', 'deals'] and format_file not in ['html', 'pdf', 'csv', 'xlsx']:
         return Http404
+    filename = f'{model}_{date_today}.{format_file}'
+    reports_path = f'reports/{format_file}/{filename}'
     stocks_content_fields = ['№', 'Тикер', 'Полное название', 'Кол-во акций',
                              'Размер лота', 'Цена 1 акции']
     deals_content_fields = ['№', 'Тикер', 'Кол-во акций', 'Цена покупки',
                             'Потрачено', 'Стоимость', 'Прибыль']
     if model == 'stocks':
-        values = list(Stocks.objects.order_by('secid').values_list('secid', 'secname', 'issuesize', 'lotsize', 'last'))
-        filename = ReportsMaker(values, stocks_content_fields, model, format_file).write_to_file()
+        values = list(Stocks.objects.all().values_list('secid', 'secname', 'issuesize', 'lotsize', 'last'))
+        ReportsMaker(values, stocks_content_fields, model, format_file, reports_path).write_to_file()
     if model == 'deals':
         deals = request.user.dealinfo_set.all().annotate(
             secid=F('stock__secid'),
@@ -141,8 +145,8 @@ def get_reports(request, model: str, format_file: str):
             ).values_list('secid', 'quantity', 'buy_price', 'cost', 'value', 'profit')
         values = [[round(i, 2) if isinstance(i, float) else i for i in deal] for deal in deals]
         additional = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
-        filename = ReportsMaker(values, deals_content_fields, model, format_file, additional).write_to_file()
-    file = open(f'reports/{format_file}/{filename}', 'rb')
+        ReportsMaker(values, deals_content_fields, model, format_file, reports_path, additional).write_to_file()
+    file = open(reports_path, 'rb')
     # return FileResponse(file, as_attachment=True, filename=filename)
     response = HttpResponse(file.read(), content_type=f'application/{format_file}')
     response['Content-Disposition'] = f'attachment; filename={filename}'

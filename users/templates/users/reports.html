@@ -1,10 +1,14 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+{% include 'includes/navbar_top.html' %}
+<br><br>
 <ul>
     <li><b><a href="{% url 'get_reports' 'stocks' 'pdf' %}">Отчет по всем акциям в pdf</a></b></li>
     <li><b><a href="{% url 'get_reports' 'deals' 'pdf' %}">Отчет по всем сделкам в pdf</a></b></li>

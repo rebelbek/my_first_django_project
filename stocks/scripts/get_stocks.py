@@ -38,7 +38,7 @@ def get_data_for_all(data: dict, stocks_fields: list) -> list[dict]:
     return result
 
 
-def get_data_for_one(data: dict, stock_fields: list) -> dict:
+def get_data_for_one(data: dict, stock_fields: dict) -> dict:
      result = {}
      for key, value in data['rows']['row'].items():
          if key[1:].lower() in stock_fields:
@@ -54,7 +54,7 @@ def get_data_for_one(data: dict, stock_fields: list) -> dict:
      return result
 
 
-def get_stocks_dict(stocks_fields) -> dict:
+def get_stocks_dict(stocks_fields: list) -> list:
     data = get_data(url_stocks)
     result1 = get_data_for_all(data[0], stocks_fields)
     result2 = get_data_for_all(data[1], stocks_fields)

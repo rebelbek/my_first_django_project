@@ -1,7 +1,7 @@
 {% extends 'registration/base_user.html' %}
 
 {% block title %}
-Авторизация
+Регистрация
 {% endblock %}
 
 {% block content %}
@@ -9,19 +9,20 @@
             {% csrf_token %}
             <h1>Регистрация</h1>
 			<div>
-				<input type="text" name="username" placeholder="Пользователь" required="" id="username" />
+			<input type="text" name="username" placeholder="Пользователь" required="" id="username" />
 			</div>
 			<div>
 				<input type="password" name="password1" placeholder="Пароль" required="" id="password" />
 			</div>
-            <div>
+					 <div>
 				<input type="password" name="password2" placeholder="Повторите пароль" required="" id="password" />
 			</div>
+
 			<div>
                 {{form.errors}}
 				<input type="submit" value="Регистрация" />
 <!--				<a href="#">Lost your password?</a>-->
-				<a href="{% url 'login' %}">Авторизация</a>
+				<a href="{% url 'login' %}">Аутентификация</a>
 				<a href="/">Главная</a>
 			</div>
 		</form>

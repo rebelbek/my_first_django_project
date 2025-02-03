@@ -1,20 +1,17 @@
 from weasyprint import HTML
 import csv
 import openpyxl
-from datetime import datetime
-
-date_today = datetime.today().strftime('%d-%m-%Y')
 
 
 class ReportsMaker:
-    def __init__(self, values: list, content_field: list, model: str, format_file: str, additional: dict = {}):
+    def __init__(self, values: list, content_field: list, model: str, format_file: str,
+                 reports_path: str, additional: dict = {}):
         self.values = values
+        self.content_fields = content_field
         self.model = model
         self.format_file = format_file
+        self.reports_path = reports_path
         self.additional = additional
-        self.filename = f'{model}_{date_today}.{format_file}'
-        self.path = f'reports/{format_file}/{self.filename}'
-        self.content_fields = content_field
 
     def get_html_fields(self):
         result = []
@@ -28,10 +25,10 @@ class ReportsMaker:
         return result
 
     def get_content_html_fields(self):
-        fields_lst = []
+        result = []
         for item in self.content_fields:
-            fields_lst.append(f"<td><b>{item}</b></td>")
-        return f"<tr> {' '.join(fields_lst)} </tr>"
+            result.append(f"<td><b>{item}</b></td>")
+        return f"<tr> {' '.join(result)} </tr>"
 
     def write_to_html_or_pdf(self):
         content_html_fields = self.get_content_html_fields()
@@ -47,13 +44,13 @@ class ReportsMaker:
             html = f'''<table> {content_html_fields} {' '.join(stocks_html_fields)} </table>'''
         if self.format_file == 'pdf':
             result = HTML(string=html)
-            result.write_pdf(self.path)
+            result.write_pdf(self.reports_path)
         else:
-            with open(self.path, "w") as file:
+            with open(self.reports_path, "w") as file:
                 file.write(html)
 
     def write_to_csv(self):
-        with open(self.path, "w", newline="") as file:
+        with open(self.reports_path, "w", newline="") as file:
             filewriter = csv.writer(file)
             filewriter.writerow(self.content_fields[1:])
             for field in self.values:
@@ -71,7 +68,7 @@ class ReportsMaker:
         if self.additional:
             sheet.append(['Потрачено', 'Стоимость', 'Прибыль'])
             sheet.append([round(i, 2) for i in self.additional.values()])
-        file.save(self.path)
+        file.save(self.reports_path)
 
     def write_to_file(self):
         if self.format_file == 'pdf' or 'html':
@@ -80,7 +77,6 @@ class ReportsMaker:
             self.write_to_csv()
         if self.format_file == 'xlsx':
             self.write_to_xlsx()
-        return self.filename
 
 
 if __name__ == '__main__':

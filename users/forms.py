@@ -1,11 +1,12 @@
 from django import forms
-from .models import DealInfo
+from .models import DealInfo, User
+from django.contrib.auth.forms import UserCreationForm
 
 
-# class DealForm(forms.Form):
-#     secid = forms.CharField(label='Тикер', max_length=5, validators=[MinLengthValidator(4)], required=True)
-#     quantity = forms.IntegerField(label='Количество акций', required=True)
-#     buy_price = forms.FloatField(label='Средняя цена 1 акции', required=True)
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username',)
 
 
 class AddStocksForm(forms.Form):
