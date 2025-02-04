@@ -11,7 +11,8 @@ from .forms import SearchForm, DealForm
 # Create your views here.
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
-stocks_fields_to_show = ['secid', 'shortname', 'secname', 'issuesize', 'lotsize', 'last']
+stocks_fields_to_show = ['тикер', 'короткое название', 'полное название',
+                         'кол-во акций', 'размер лота', 'цена 1 акции']
 
 
 def stocks_main(request):
@@ -55,6 +56,9 @@ def stocks_search(request):
 
 
 def stock_list_sort(request, filter_field, direction):
+    field_dict = {'тикер': 'secid', 'короткое название': 'shortname', 'полное название':
+        'secname', 'кол-во акций': 'issuesize', 'размер лота': 'lotsize', 'цена 1 акции': 'last'}
+    filter_field = field_dict[f'{filter_field}']
     if direction == 'descend':
         filter_field = '-' + filter_field
     stocks = Stocks.objects.order_by(filter_field)
