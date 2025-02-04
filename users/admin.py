@@ -1,9 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import DealInfo, User
 
 # Register your models here.
 
-class UserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     pass
 
 class UserDealAdmin(admin.ModelAdmin):
@@ -13,4 +14,4 @@ class UserDealAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DealInfo, UserDealAdmin)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, CustomUserAdmin)

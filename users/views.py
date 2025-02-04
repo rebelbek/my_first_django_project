@@ -38,8 +38,8 @@ def deal_add(request, secid: str):
 
 
 @login_required
-def stocks_add(request, id: int):
-    deal = get_object_or_404(DealInfo, id=id)
+def stocks_add(request, pk: int):
+    deal = get_object_or_404(DealInfo, pk=pk)
     if request.method == 'POST':
         form = AddStocksForm(request.POST)
         if form.is_valid():
@@ -48,13 +48,13 @@ def stocks_add(request, id: int):
                               (cd['buy_price'] * cd['quantity'])) / (deal.quantity + cd['quantity'])
             deal.quantity += cd['quantity']
             deal.save()
-    redirect_url = reverse('deal_detail', args=[id])
+    redirect_url = reverse('deal_detail', args=[pk])
     return HttpResponseRedirect(redirect_url)
 
 
 @login_required
-def deal_delete(request, id: int):
-    deal = request.user.dealinfo_set.get(id=id)
+def deal_delete(request, pk: int):
+    deal = request.user.dealinfo_set.get(pk=pk)
     if request.method == 'POST':
         deal.delete()
         redirect_url = reverse('cabinet')
@@ -84,18 +84,18 @@ def cabinet(request):
 
 
 @login_required
-def deal_detail(request, id: int):
-    deal = get_object_or_404(DealInfo, id=id)
+def deal_detail(request, pk: int):
+    deal = get_object_or_404(DealInfo, pk=pk)
     if request.method == 'POST':
         form = DealInfoForm(request.POST, instance=deal)
         form_set = DealSetBorderForm(request.POST, instance=deal)
         if form.is_valid():
             form.save()
-            redirect_url = reverse(f'deal_detail', args=[id])
+            redirect_url = reverse(f'deal_detail', args=[pk])
             return HttpResponseRedirect(redirect_url)
         if form_set.is_valid():
             form_set.save()
-            redirect_url = reverse(f'deal_detail', args=[id])
+            redirect_url = reverse(f'deal_detail', args=[pk])
             return HttpResponseRedirect(redirect_url)
     else:
         form = DealInfoForm(instance=deal)

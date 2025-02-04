@@ -5,7 +5,7 @@ import openpyxl
 
 class ReportsMaker:
     def __init__(self, values: list, content_field: list, model: str, format_file: str,
-                 reports_path: str, additional: dict = {}):
+                 reports_path: str, additional: dict = None):
         self.values = values
         self.content_fields = content_field
         self.model = model

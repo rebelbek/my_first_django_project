@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = UserCreationForm.Meta.fields
 
 
 class AddStocksForm(forms.Form):
