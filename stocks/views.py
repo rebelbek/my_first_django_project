@@ -11,19 +11,24 @@ from .forms import SearchForm, DealForm
 # Create your views here.
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
-stocks_fields_to_show = ['тикер', 'короткое название', 'полное название',
-                         'кол-во акций', 'размер лота', 'цена 1 акции']
+stocks_fields_to_show = {'тикер': 'secid', 'короткое название': 'shortname', 'полное название':
+    'secname', 'кол-во акций': 'issuesize', 'размер лота': 'lotsize', 'цена 1 акции': 'last'}
 
 
 def stocks_main(request):
-    form = SearchForm()
-    stocks = Stocks.objects.all()
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
+                                       Q(shortname__icontains=form.cleaned_data['input']) |
+                                       Q(secname__icontains=form.cleaned_data['input']))
+    else:
+        stocks = Stocks.objects.all()
     stocks_count = stocks.count()
     date_moscow = datetime.datetime.now(offset)
     context = {'stocks': stocks,
                'form': form,
                'stocks_count': stocks_count,
-               'stocks_fields': stocks_fields_to_show,
+               'stocks_fields': stocks_fields_to_show.keys(),
                'msc_time': date_moscow}
     return render(request, 'stocks/stocks.html', context=context)
 
@@ -38,27 +43,8 @@ def stock_detail(request, secid: str):
     return render(request, 'stocks/stock_detail.html', context=context)
 
 
-def stocks_search(request):
-    form = SearchForm(request.GET)
-    if form.is_valid():
-        stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
-                                       Q(shortname__icontains=form.cleaned_data['input']) |
-                                       Q(secname__icontains=form.cleaned_data['input']))
-    else:
-        redirect_url = reverse('main_stocks')
-        return HttpResponseRedirect(redirect_url)
-    stocks_count = stocks.count()
-    context = {'stocks': stocks,
-               'form': form,
-               'stocks_count': stocks_count,
-               'stocks_fields': stocks_fields_to_show}
-    return render(request, 'stocks/stocks.html', context=context)
-
-
 def stock_list_sort(request, filter_field, direction):
-    field_dict = {'тикер': 'secid', 'короткое название': 'shortname', 'полное название':
-        'secname', 'кол-во акций': 'issuesize', 'размер лота': 'lotsize', 'цена 1 акции': 'last'}
-    filter_field = field_dict[f'{filter_field}']
+    filter_field = stocks_fields_to_show[f'{filter_field}']
     if direction == 'descend':
         filter_field = '-' + filter_field
     stocks = Stocks.objects.order_by(filter_field)
