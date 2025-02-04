@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -9,14 +10,15 @@ from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_http_methods
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
-from datetime import datetime
 from stocks.forms import DealForm
 from stocks.models import Stocks
 from stocks.scripts.make_reports import ReportsMaker
 
 # Create your views here.
 
-date_today = datetime.today().strftime('%d-%m-%Y')
+
+offset = datetime.timezone(datetime.timedelta(hours=3))
+date_today = datetime.datetime.today().strftime('%d-%m-%Y')
 deals_fields_to_show = ['тикер', 'дата сделки', 'полное название', 'кол-во акций', 'цена покупки',
                         'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'X']
 
@@ -72,11 +74,13 @@ def cabinet(request):
     )
     new_notification = user.new_notifications()
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
+    date_moscow = datetime.datetime.now(offset)
     context = {'form': form,
                'deals': deals,
                'new_notification': new_notification,
                'agg': agg,
-               'deals_fields': deals_fields_to_show}
+               'deals_fields': deals_fields_to_show,
+               'msc_time': date_moscow}
     return render(request, 'users/cabinet.html', context=context)
 
 

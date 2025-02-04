@@ -8,6 +8,7 @@
 * django
 * django-extensions
 * django-crontab
+* django-htmx
 * requests
 * xmltodict
 * weasyprint
