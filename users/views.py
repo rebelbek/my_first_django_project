@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum
 from django.http import HttpResponse, Http404
+from django.views.decorators.http import require_http_methods
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
 from .models import DealInfo
 from datetime import datetime
@@ -53,15 +54,11 @@ def stocks_add(request, pk: int):
 
 
 @login_required
+@require_http_methods(['DELETE'])
 def deal_delete(request, pk: int):
     deal = request.user.dealinfo_set.get(pk=pk)
-    if request.method == 'POST':
-        deal.delete()
-        redirect_url = reverse('cabinet')
-        return HttpResponseRedirect(redirect_url)
-    else:
-        context = {'deal': deal}
-    return render(request, 'users/deal_delete.html', context=context)
+    deal.delete()
+    return HttpResponse()
 
 
 @login_required

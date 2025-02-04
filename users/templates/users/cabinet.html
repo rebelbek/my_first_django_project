@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Личный кабинет {{user.username}}</title>
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include 'includes/navbar_top.html' %}
     <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
@@ -49,7 +49,12 @@
             {% else %}
             <td style="background-color: #ff6b6b"><b>{{deal.profit|floatformat:2}}</b></td>
             {% endif %}
-            <td><b><a href="{% url 'deal_delete' deal.id %}">X</a></b></td>
+            <td><b><button
+                    hx-delete="{% url 'deal_delete' deal.id %}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML"
+                    hx-confirm="Удалить позицию?">
+                X</button></b></td>
         </tr>
         {% endfor %}
     </table>
@@ -59,5 +64,6 @@
         <li><p>Стоимость всех акций: {{agg.value__sum|floatformat:2}}</p></li>
         <li><p>Прибыль: {{agg.profit__sum|floatformat:2}}</p></li>
     </ul>
+<script src="{% static 'js/htmx.min.js' %}" defer></script>
 </body>
 </html>
