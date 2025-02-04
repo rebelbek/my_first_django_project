@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -10,19 +10,20 @@ from .forms import SearchForm, DealForm
 
 # Create your views here.
 
-stocks_fields_to_show = ['тикер', 'короткое название', 'полное название', 'количество акций', 'размер лота',
-                         'цена 1 акции']
+offset = datetime.timezone(datetime.timedelta(hours=3))
+stocks_fields_to_show = ['secid', 'shortname', 'secname', 'issuesize', 'lotsize', 'last']
 
 
 def stocks_main(request):
     form = SearchForm()
     stocks = Stocks.objects.all()
     stocks_count = stocks.count()
+    date_moscow = datetime.datetime.now(offset)
     context = {'stocks': stocks,
                'form': form,
                'stocks_count': stocks_count,
                'stocks_fields': stocks_fields_to_show,
-               'current_time': datetime.now().time()}
+               'msc_time': date_moscow}
     return render(request, 'stocks/stocks.html', context=context)
 
 
@@ -51,6 +52,13 @@ def stocks_search(request):
                'stocks_count': stocks_count,
                'stocks_fields': stocks_fields_to_show}
     return render(request, 'stocks/stocks.html', context=context)
+
+
+def stock_list_sort(request, filter_field, direction):
+    if direction == 'descend':
+        filter_field = '-' + filter_field
+    stocks = Stocks.objects.order_by(filter_field)
+    return render(request, 'stocks/partial_stock_list.html', {'stocks': stocks})
 
 
 @login_required

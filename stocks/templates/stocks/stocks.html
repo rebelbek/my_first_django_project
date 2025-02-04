@@ -9,9 +9,8 @@
 <body>
 {% include 'includes/navbar_top.html' %}
 <br><br>
-    <p>Текущее время: {{current_time}}</p>
+    <h3 style="text-align: center;">{{msc_time}} (Москва)</h3>
      <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
-
 <table>
     <tr>
     <td><form action="{% url 'stocks_search' %}" method="GET">
@@ -27,23 +26,28 @@
 <p>Всего акций: {{stocks_count}}</p>
 <table class="table">
     <tr>
-        <td><b>№</b></td>
-        {% for item in stocks_fields %}
-        <td><b>{{item|capfirst}}</b></td>
-        {% endfor %}
-    </tr>
-    {% for stock in stocks %}
-    <tr>
-        <td>{{forloop.counter}}</td>
-        <td><b><a href = "{{stock.get_url}}">{{stock.secid}}</a></b></td>
-        <td><b>{{stock.shortname}}</b></td>
-        <td><b>{{stock.secname}}</b></td>
-        <td><b>{{stock.issuesize}}</b></td>
-        <td><b>{{stock.lotsize}}</b></td>
-        <td><b>{{stock.last}}</b></td>
-    </tr>
+    <td><b>№</b></td>
+    {% for item in stocks_fields %}
+    <td><b>{{item|capfirst}}
+    <a href=""
+       hx-get="{% url 'stock_list_sort' item 'descend' %}"
+       hx-target="#stock-list"
+       hx-swap="innerHTML">
+        ⇓
+    </a>
+    <a href=""
+       hx-get="{% url 'stock_list_sort' item 'ascend' %}"
+       hx-target="#stock-list"
+       hx-swap="innerHTML">
+        ⇑
+    </a>
+    </b></td>
     {% endfor %}
+    </tr>
+    <tbody id="stock-list">
+        {% include "stocks/partial_stock_list.html" %}
+    </tbody>
 </table>
-
+<script src="{% static 'js/htmx.min.js' %}" defer></script>
 </body>
 </html>
