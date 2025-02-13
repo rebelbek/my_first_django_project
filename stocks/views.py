@@ -1,6 +1,6 @@
 import datetime
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.db import connection
 from django.db.models import Q
@@ -35,8 +35,11 @@ def stocks_main(request):
 
 def stock_detail(request, secid: str):
     stock = get_object_or_404(Stocks, secid=secid)
-    form = DealForm
     values_list = list(stock.__dict__.items())[2:]
+    if request.htmx:
+        return HttpResponse(''.join([f'<tr><td><b>{key.title()}</b></td><td><b>{value}</b></td></tr>'
+                            for key, value in values_list]))
+    form = DealForm
     context = {'values_list': values_list,
                'stock': stock,
                'form': form}

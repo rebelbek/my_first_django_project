@@ -20,12 +20,16 @@
         <td><b>Столбец</b></td>
         <td><b>Название</b></td>
     </tr>
+    <tbody hx-get="{% url 'stock_detail' stock.secid %}"
+           hx-trigger="every 60s"
+           hx-target="closest tbody">
     {% for key, value in values_list %}
     <tr>
         <td><b>{{key|title}}</b></td>
         <td><b>{{value}}</b></td>
-    {% endfor %}
     </tr>
+    {% endfor %}
+    </tbody>
 </table>
 <article>
     <h2>Добавить позицию {{stock.secid}}:</h2>
@@ -38,5 +42,6 @@
     </form>
 </article>
 </main>
+<script src="{% static 'js/htmx.min.js' %}" defer></script>
 </body>
 </html>
