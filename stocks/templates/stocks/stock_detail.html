@@ -10,10 +10,12 @@
 <body>
     {% include 'includes/navbar_top.html' %}
     <h2>{{stock}}</h2>
+    {% if user.is_superuser %}
     <form action="{% url 'stock_update' stock.secid %}" method="POST">
         {% csrf_token %}
         <button class="btn2">Обновить данные</button>
     </form>
+    {% endif %}
 <main>
 <table class="table">
     <tr>

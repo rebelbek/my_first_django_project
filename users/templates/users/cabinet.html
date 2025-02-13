@@ -50,9 +50,11 @@
             <td><b>{{deal.stock.last|floatformat:2}}</b></td>
             <td><b>{{deal.value|floatformat:2}}</b></td>
             {% if deal.profit > 0 %}
-            <td style="background-color: #4eb45a"><b>{{deal.profit|floatformat:2}}</b></td>
+                <td style="background-color: #4eb45a"><b>{{deal.profit|floatformat:2}}</b></td>
+            {% elif deal.profit < 0 %}
+                <td style="background-color: #ff6b6b"><b>{{deal.profit|floatformat:2}}</b></td>
             {% else %}
-            <td style="background-color: #ff6b6b"><b>{{deal.profit|floatformat:2}}</b></td>
+                <td><b>{{deal.profit|floatformat:2}}</b></td>
             {% endif %}
             <td><b><button
                     hx-delete="{% url 'deal_delete' deal.id %}"

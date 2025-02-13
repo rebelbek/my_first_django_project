@@ -57,4 +57,5 @@ class Stocks(models.Model):
         stock_fields = get_stock_dict(dict(cls.objects.get(secid=secid).__dict__.items()))
         cls.objects.filter(secid=secid).update(**stock_fields)
 
+
 # python3 manage.py shell_plus --print-sql

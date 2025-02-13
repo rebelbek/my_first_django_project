@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include('stocks.urls')),
     path('cabinet/', include('users.urls')),
     path('notifications/', include('notifications.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

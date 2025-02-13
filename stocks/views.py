@@ -1,4 +1,5 @@
 import datetime
+from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -21,9 +22,10 @@ def stocks_main(request):
         stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
                                        Q(shortname__icontains=form.cleaned_data['input']) |
                                        Q(secname__icontains=form.cleaned_data['input']))
+        stocks_count = stocks.count()
     else:
-        stocks = Stocks.objects.all()
-    stocks_count = stocks.count()
+        stocks = cache.get_or_set('cached_stocks', Stocks.objects.all(), 60)
+        stocks_count = cache.get_or_set('cached_count', stocks.count(), 60)
     date_moscow = datetime.datetime.now(offset)
     context = {'stocks': stocks,
                'form': form,
@@ -50,7 +52,8 @@ def stock_list_sort(request, filter_field, direction):
     filter_field = stocks_fields_to_show[f'{filter_field}']
     if direction == 'descend':
         filter_field = '-' + filter_field
-    stocks = Stocks.objects.order_by(filter_field)
+    cache_key = 'cached_sort_stocks_' + filter_field
+    stocks = cache.get_or_set(cache_key, Stocks.objects.order_by(filter_field), 60)
     return render(request, 'stocks/partial_stock_list.html', {'stocks': stocks})
 
 
