@@ -12,14 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.conf.global_settings import DATABASES, AUTH_USER_MODEL
+from dotenv import load_dotenv
 import os
-import sys
-
-# добавить путь для импорта скрипта который получает данные из .env
-# и импортировать переменные из скрипта
-sys.path.append(os.path.join(os.getcwd(), '..'))
-from env.get_from_env import db_name, db_user, db_password
-
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,10 +89,10 @@ WSGI_APPLICATION = 'py_dd.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': db_name,
-        'USER': db_user,
-        'PASSWORD': db_password,
-        'HOST': 'localhost'
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSW'),
+        'HOST': os.getenv('DB_HOST')
     }
 }
 

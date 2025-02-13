@@ -1,12 +1,8 @@
-import os
-import sys
 import requests # внешний модуль
 import xmltodict # внешний модуль
-
-# добавил путь для импорта скрипта который получает url из .env
-# и импортировал переменные из скрипта
-sys.path.append(os.path.join(os.getcwd(), '../..'))
-from env.get_from_env import url_stocks, url_stock
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 def get_data(url) -> list[dict]:
@@ -55,7 +51,7 @@ def get_data_for_one(data: dict, stock_fields: dict) -> dict:
 
 
 def get_stocks_dict(stocks_fields: list) -> list:
-    data = get_data(url_stocks)
+    data = get_data(os.getenv('URL_STOCKS'))
     result1 = get_data_for_all(data[0], stocks_fields)
     result2 = get_data_for_all(data[1], stocks_fields)
     result = [{**values1, **values2} for values1, values2 in zip(result1, result2)]
@@ -63,7 +59,7 @@ def get_stocks_dict(stocks_fields: list) -> list:
 
 
 def get_stock_dict(stock_fields: dict) -> dict:
-    url = url_stock.replace('{BOARDID}', stock_fields['boardid']).replace('{TICKER}', stock_fields['secid'])
+    url = os.getenv('URL_STOCK').replace('{BOARDID}', stock_fields['boardid']).replace('{TICKER}', stock_fields['secid'])
     data = get_data(url)
     result1 = get_data_for_one(data[0], stock_fields)
     result2 = get_data_for_one(data[1], stock_fields)
@@ -72,6 +68,6 @@ def get_stock_dict(stock_fields: dict) -> dict:
 
 # для проверок
 if __name__ == '__main__':
-    lst = get_data(url_stock.replace('{BOARDID}', 'TQBR').replace('{TICKER}', 'ABIO'))
+    lst = get_data(os.getenv('URL_STOCK').replace('{BOARDID}', 'TQBR').replace('{TICKER}', 'ABIO'))
     print(lst[0]['rows']['row'])
     print(get_data_for_one(lst[0], {'secid': 123, 'secname': 234}))
