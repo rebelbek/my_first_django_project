@@ -1,0 +1,13 @@
+Django==5.1.5
+django-crontab==0.7.1
+django-debug-toolbar==5.0.1
+django-extensions==3.2.3
+django-htmx==1.21.0
+openpyxl==3.1.5
+psycopg2-binary==2.9.10
+pymemcache==4.0.0
+python-dotenv==1.0.1
+requests==2.32.3
+xmltodict==0.14.2
+weasyprint==64.0
+gunicorn==21.2.0
