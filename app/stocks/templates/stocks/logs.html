@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+{% include 'includes/navbar_top.html' %}
+<br><br><br>
+<table class="table">
+    <tr>
+        <td style="width: 30%;"><b>Функция</b></td>
+        <td><b>Время</b></td>
+    </tr>
+    {% for log in logs %}
+    <tr>
+        <td><b>{{log.func|title}}</b></td>
+        <td><b>{{func.date|date:"d.m.Y H:i"}}</b></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

@@ -1,7 +1,6 @@
 from weasyprint import HTML
 import csv
 import openpyxl
-# from xhtml2pdf import pisa
 
 
 class ReportsMaker:
@@ -46,8 +45,6 @@ class ReportsMaker:
         if self.format_file == 'pdf':
             result = HTML(string=html)
             result.write_pdf(self.reports_path)
-            # with open(self.reports_path, "wb") as pdf_file:
-            #     pisa.CreatePDF(html, dest=pdf_file, encoding='utf-8')
         else:
             with open(self.reports_path, "w") as file:
                 file.write(html)

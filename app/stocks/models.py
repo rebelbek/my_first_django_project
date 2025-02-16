@@ -58,4 +58,12 @@ class Stocks(models.Model):
         cls.objects.filter(secid=secid).update(**stock_fields)
 
 
+class CronLogs(models.Model):
+    func = models.CharField(max_length=40)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+
 # python3 manage.py shell_plus --print-sql

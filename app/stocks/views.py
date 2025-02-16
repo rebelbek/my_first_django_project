@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.db import connection
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .models import Stocks
+from .models import Stocks, CronLogs
 from .forms import SearchForm, DealForm
 
 # Create your views here.
@@ -78,7 +78,20 @@ def stocks_download(request):
         return HttpResponseRedirect(redirect_url)
 
 
+def stocks_update(request):
+    Stocks.update_all()
+    CronLogs.objects.create(func = 'stocks_update')
+    redirect_url = request.META.get('HTTP_REFERER')
+    return HttpResponseRedirect(redirect_url)
+
+
 def stock_update(request, secid: str):
     Stocks.update_one(secid=secid)
     redirect_url = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(redirect_url)
+
+
+def show_update_logs(request):
+    logs = CronLogs.objects.all()
+    context = {'logs': logs}
+    return render(request, 'stocks/logs.html', context=context)

@@ -7,5 +7,7 @@ urlpatterns = [
     path('stock-update/<str:secid>', views.stock_update, name='stock_update'),
     path('stocks-download', views.stocks_download, name='stocks_download'),
     path('stocks-delete', views.stocks_delete, name='stocks_delete'),
+    path('logs', views.show_update_logs, name='show_update_logs'),
     path('<str:secid>', views.stock_detail, name='stock_detail'),
+
 ]
