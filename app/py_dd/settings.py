@@ -148,8 +148,8 @@ LOGIN_REDIRECT_URL = 'cabinet'
 LOGOUT_REDIRECT_URL = 'login'
 
 CRONJOBS = [
-    ('* 7-23 * * 1-5', 'stocks.cron.update_stocks'),
-    ('* 7-23 * * 1-5', 'stocks.cron.check_border')
+    ('* 7-23 * * *', 'stocks.cron.update_stocks'),
+    ('* 7-23 * * *', 'stocks.cron.check_border')
 ]
 
 CACHES = {

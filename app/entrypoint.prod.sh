@@ -12,10 +12,6 @@ then
     echo "PostgreSQL запущен"
 fi
 
-if [ "$1" = cron ]; then
-  ./manage.py crontab add
-fi
-
 exec "$@"
 
 
