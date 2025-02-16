@@ -17,7 +17,7 @@
     {% for log in logs %}
     <tr>
         <td><b>{{log.func|title}}</b></td>
-        <td><b>{{func.date|date:"d.m.Y H:i"}}</b></td>
+        <td><b>{{log.date|date:"d.m.Y H:i"}}</b></td>
     </tr>
     {% endfor %}
 </table>
