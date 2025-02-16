@@ -3,7 +3,16 @@ from django.urls import reverse
 from django.core.validators import MinLengthValidator
 from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
+
 # Create your models here.
+
+class CronLogs(models.Model):
+    func = models.CharField(max_length=40)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
 
 class Stocks(models.Model):
     secid = models.CharField(max_length=10, unique=True)
@@ -48,6 +57,7 @@ class Stocks(models.Model):
 
     @classmethod
     def update_all(cls):
+        CronLogs.objects.create(func='stocks_update')
         stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         for item in stocks_fields:
             cls.objects.update_or_create(secid=item['secid'], defaults=item)
@@ -56,14 +66,5 @@ class Stocks(models.Model):
     def update_one(cls, secid):
         stock_fields = get_stock_dict(dict(cls.objects.get(secid=secid).__dict__.items()))
         cls.objects.filter(secid=secid).update(**stock_fields)
-
-
-class CronLogs(models.Model):
-    func = models.CharField(max_length=40)
-    date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-date']
-
 
 # python3 manage.py shell_plus --print-sql

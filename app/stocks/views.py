@@ -79,10 +79,10 @@ def stocks_download(request):
 
 
 def stocks_update(request):
-    Stocks.update_all()
-    CronLogs.objects.create(func = 'stocks_update')
-    redirect_url = request.META.get('HTTP_REFERER')
-    return HttpResponseRedirect(redirect_url)
+    if request.user.is_superuser():
+        Stocks.update_all()
+        redirect_url = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(redirect_url)
 
 
 def stock_update(request, secid: str):
