@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import AbstractUser
-from stocks.models import Stocks
+from stocks.models import Stocks, CronLogs
 from notifications.models import NotificationUser
 
 # Create your models here.
@@ -30,6 +30,7 @@ class DealInfo(models.Model):
 
     @classmethod
     def check_borders(cls):
+        CronLogs.objects.create(func='check_borders')
         for deal in (cls.objects.filter(upper_border='True') | cls.objects.filter(lower_border='True')):
             if deal.upper_border:
                 if deal.stock.last >= deal.upper_border:

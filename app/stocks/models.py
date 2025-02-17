@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.core.validators import MinLengthValidator
 from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
@@ -8,7 +9,7 @@ from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
 class CronLogs(models.Model):
     func = models.CharField(max_length=40)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now())
 
     class Meta:
         ordering = ['-date']
@@ -24,13 +25,13 @@ class Stocks(models.Model):
     boardname = models.CharField(max_length=40)
     secname = models.CharField(max_length=40, validators=[MinLengthValidator(3)], blank=False)
     prevwaprice = models.FloatField(null=True)
-    prevdate = models.DateField()
+    # prevdate = models.DateField()
     issuesize = models.PositiveBigIntegerField()
     isin = models.CharField(max_length=40)
     latname = models.CharField(max_length=40)
     prevlegalcloseprice = models.FloatField(null=True)
     listlevel = models.IntegerField()
-    settledate = models.DateField()
+    # settledate = models.DateField()
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)

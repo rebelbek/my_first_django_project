@@ -81,7 +81,7 @@ def stocks_download(request):
 def stocks_update(request):
     if request.user.is_superuser:
         Stocks.update_all()
-        redirect_url = request.META.get('HTTP_REFERER')
+        redirect_url = reverse('stocks_main')
         return HttpResponseRedirect(redirect_url)
 
 
@@ -92,6 +92,6 @@ def stock_update(request, secid: str):
 
 
 def show_update_logs(request):
-    logs = CronLogs.objects.all()
+    logs = CronLogs.objects.all()[:20]
     context = {'logs': logs}
     return render(request, 'stocks/logs.html', context=context)
