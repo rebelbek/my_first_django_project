@@ -22,6 +22,10 @@ date_today = datetime.datetime.today().strftime('%d-%m-%Y')
 deals_fields_to_show = ['тикер', 'дата сделки', 'полное название', 'кол-во акций', 'цена покупки',
                         'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'X']
 
+def check_borders(request):
+    DealInfo.check_borders()
+    redirect_url = reverse('cabinet')
+    return HttpResponseRedirect(redirect_url)
 
 @login_required
 def deal_add(request, secid: str):

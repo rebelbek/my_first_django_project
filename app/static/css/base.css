@@ -20,6 +20,10 @@ input[type="checkbox"] {
   transform: scale(2);
 }
 
+input {
+  max-width: 90%;
+}
+
 .change {
     margin: 1.5rem auto 5px;
     width: 80%;
