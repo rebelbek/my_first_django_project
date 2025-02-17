@@ -12,15 +12,12 @@ then
     echo "PostgreSQL запущен"
 fi
 
-set -o errexit
-set -o pipefail
-set -o nounset
+exec "$@"
 
-printenv | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID|LANG|PWD|GPG_KEY|_=' >> /etc/environment
+# If this is going to be a cron container, set up the crontab.
+if [ "$1" = cron ]; then
+  ./manage.py crontab add
+fi
 
-python manage.py crontab remove
-python manage.py crontab add
-service cron start
-gunicorn py_dd.wsgi:application --bind 0.0.0.0:8000
-
+# Launch the main container command passed as arguments.
 exec "$@"
