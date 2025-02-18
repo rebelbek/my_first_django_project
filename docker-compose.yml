@@ -18,6 +18,16 @@ services:
       - db
       - memcached
 
+#  cron:
+#    build: ./app
+#    restart: unless-stopped
+#    env_file:
+#      - .env
+#    depends_on:
+#      - db
+#      - memcached
+#    command: cron -f
+
   db:
     # Берём образ БД PostgreSQL версии 15
     image: postgres:15
@@ -33,15 +43,6 @@ services:
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
       - POSTGRES_DB=${SQL_DATABASE}
 
-#  cron:
-#    build: ./app
-#    restart: unless-stopped
-#    env_file:
-#      - .env
-#    depends_on:
-#      - db
-#      - memcached
-#    command: cron -f
 
   memcached:
     # Берём образ Мemcached версии 1.6.21

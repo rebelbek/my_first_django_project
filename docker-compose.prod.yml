@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile.prod
     restart: always
     # Запускаем сервер Gunicorn
-    command: gunicorn py_dd.wsgi:application --bind 0.0.0.0:8000
+#    command: gunicorn py_dd.wsgi:application --bind 0.0.0.0:8000
     # Примонтируем том static-data к директории /home/app/web/static контейнера web
     volumes:
       - static-data:/home/app/web/static
@@ -24,15 +24,17 @@ services:
       - db
       - memcached
 
-  cron:
-    build: ./app
-    restart: unless-stopped
-    env_file:
-      - .env.prod
-    depends_on:
-      - db
-      - memcached
-    command: cron -f
+#  cron:
+#    build:
+#      context: ./app
+#      dockerfile: Dockerfile.prod
+#    restart: unless-stopped
+#    env_file:
+#      - .env.prod
+#    depends_on:
+#      - db
+#      - memcached
+#    command: cron -f
 
   db:
     # Берём образ БД PostgreSQL версии 15

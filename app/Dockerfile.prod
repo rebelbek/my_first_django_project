@@ -1,65 +1,25 @@
-###########
-# BUILDER #
-###########
+# pull the official base image
+FROM python:latest
 
-FROM python:3.12.0-alpine as builder
-
+# set work directory
 WORKDIR /usr/src/app
 
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# установка зависимостей
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apt-get update \
+    && apt-get install -y cron
+
+# install dependencies
 RUN pip install --upgrade pip
-
-# установка зависимостей
-COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+COPY ./requirements.txt /usr/src/app
+RUN pip install -r requirements.txt
 
 
-#########
-# FINAL #
-#########
 
-FROM python:3.12.0-alpine
-
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
-
-# создаем домашнюю директорию для пользователя(/home/app) и директорию для проекта(/home/app/web)
-# создаем группу app и отдельного пользователя app
-RUN mkdir -p $APP_HOME \
-    && addgroup -S app \
-    && adduser -S app -G app \
-    && apk update \
-    && apk add libpq
-
-# копирование из builder и установка зависимостей
-COPY --from=builder /usr/src/app/wheels /wheels
-RUN pip install --no-cache /wheels/*
-
-# для работы weasyprint
-RUN apk add py3-pip so:libgobject-2.0.so.0 so:libpango-1.0.so.0 so:libharfbuzz.so.0 so:libharfbuzz-subset.so.0 so:libfontconfig.so.1 so:libpangoft2-1.0.so.0
-RUN apk add gcc musl-dev python3-dev zlib-dev jpeg-dev openjpeg-dev libwebp-dev g++ libffi-dev
-RUN apk --update --upgrade --no-cache add fontconfig ttf-freefont font-noto terminus-font \
-   && fc-cache -f \
-   && fc-list | sort
-
-RUN apk add --update --no-cache dcron
-
-# устанавливаем рабочую директорию
-WORKDIR $APP_HOME
-
-# копирование проекта Django в рабочую директорию
-COPY . .
-
-# изменение владельца, для всех директорий и файлов проекта, на пользователя app
-RUN chown -R app:app .
-
-# изменение рабочего пользователя на app
-USER app
+# copy project
+COPY . /usr/src/app
 
 RUN chmod +x entrypoint.prod.sh
 ENTRYPOINT ["./entrypoint.prod.sh"]

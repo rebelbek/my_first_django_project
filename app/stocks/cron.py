@@ -11,4 +11,4 @@ def check_border():
 
 
 def delete_logs():
-    CronLogs.objects.delete()
+    CronLogs.objects.all().delete()

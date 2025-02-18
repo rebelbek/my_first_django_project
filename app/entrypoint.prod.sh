@@ -1,23 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ "$DATABASE" = "postgres" ]
-then
-    echo "Postgres еще не запущен..."
+set -o errexit
+set -o pipefail
+set -o nounset
 
-    # Проверяем доступность хоста и порта
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 1
-    done
+printenv | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID|LANG|PWD|GPG_KEY|_=' >> /etc/environment
 
-    echo "PostgreSQL запущен"
-fi
-
-exec "$@"
-
-# If this is going to be a cron container, set up the crontab.
-if [ "$1" = cron ]; then
-  ./manage.py crontab add
-fi
-
-# Launch the main container command passed as arguments.
-exec "$@"
+python manage.py crontab remove
+python manage.py crontab add
+service cron start
+gunicorn py_dd.wsgi:application --bind 0.0.0.0:8000
