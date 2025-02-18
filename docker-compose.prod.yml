@@ -39,6 +39,7 @@ services:
   db:
     # Берём образ БД PostgreSQL версии 15
     image: postgres:15
+    restart: always
     # Примонтируем том postgres-data к директории /var/lib/postgresql/data контейнера db
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -54,10 +55,12 @@ services:
   memcached:
     # Берём образ Мemcached версии 1.6.21
     image: memcached:1.6.21
+    restart: always
 
   nginx:
     # Указываем директорию ./nginx, в которой содержится Dockerfile для сборки образа
     build: ./nginx
+    restart: always
     # Примонтируем том static-data к директории /home/app/web/static контейнера nginx
     volumes:
       - static-data:/home/app/web/static
