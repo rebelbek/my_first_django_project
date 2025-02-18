@@ -9,7 +9,7 @@ from .scripts.get_stocks import get_stocks_dict, get_stock_dict
 
 class CronLogs(models.Model):
     func = models.CharField(max_length=40)
-    date = models.DateTimeField(default=timezone.now())
+    date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-date']

@@ -9,4 +9,6 @@ printenv | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID|LANG|PWD|GPG
 python manage.py crontab remove
 python manage.py crontab add
 service cron start
+python manage.py migrate
+python manage.py collectstatic --no-input
 python manage.py runserver 0.0.0.0:8000
