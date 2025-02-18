@@ -1,0 +1,23 @@
+name: pushpull
+
+on:
+  push
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run command on remote server
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.MY_KEY}}
+          command: |
+            cd ${{ secrets.SSH_PATH }};
+            git pull;
+            docker-compose --file docker-compose.prod.yml down;
+            sleep 15;
+            docker-compose --file docker-compose.prod.yml up -d --build;
