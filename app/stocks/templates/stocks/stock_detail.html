@@ -9,6 +9,7 @@
 </head>
 <body>
     {% include 'includes/navbar_top.html' %}
+    <br>
     <h2>{{stock}}</h2>
     {% if user.is_superuser %}
     <form action="{% url 'stock_update' stock.secid %}" method="POST">

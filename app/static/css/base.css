@@ -151,7 +151,7 @@ article {
     border-radius: 4px;
     border: 1px solid #ccc;
     display: flex;
-    width: 90%;
+    width: 70%;
 }
 
 .form-style input:focus {
