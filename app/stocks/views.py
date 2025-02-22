@@ -12,16 +12,15 @@ from .forms import SearchForm, DealForm
 # Create your views here.
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
-stocks_fields_to_show = {'тикер': 'secid', 'короткое название': 'shortname', 'полное название':
-    'secname', 'кол-во акций': 'issuesize', 'размер лота': 'lotsize', 'цена 1 акции': 'last'}
+stocks_fields_to_show = {'тикер': 'secid', 'короткое название': 'shortname', 'кол-во акций': 'issuesize',
+                         'размер лота': 'lotsize', 'цена 1 акции': 'last'}
 
 
 def stocks_main(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         stocks = Stocks.objects.filter(Q(secid__icontains=form.cleaned_data['input']) |
-                                       Q(shortname__icontains=form.cleaned_data['input']) |
-                                       Q(secname__icontains=form.cleaned_data['input']))
+                                       Q(shortname__icontains=form.cleaned_data['input']))
         stocks_count = stocks.count()
     else:
         stocks = cache.get_or_set('cached_stocks', Stocks.objects.all(), 60)

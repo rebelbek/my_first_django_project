@@ -9,10 +9,10 @@
 Установите docker.
 Создайте файл **.env** в корне проекта рядом с файлом **.env.example**.
 Инструкция по получению значения SECRET_KEY:
-
-'''from django.core.management.utils import get_random_secret_key
-get_random_secret_key()'''
-
+```
+from django.core.management.utils import get_random_secret_key
+get_random_secret_key()
+```
 Остальные значения придумываете сами.
 
 ## Запуск
