@@ -33,7 +33,7 @@ input[type="checkbox"] {
 
 h2{
     width:90%;
-    color: #6464d2;
+    color: #3c759e;
     font-size: 2rem;
     -webkit-text-stroke: 0.5px black;
     text-stroke: 1px #6b62ba;
@@ -44,7 +44,7 @@ h2{
 }
 
 h3{
-    color: #6464d2;
+    color: #3c759e;
     font-size: 1.2rem;
     margin: 20px auto 5px;
     padding: 5px;
@@ -151,7 +151,7 @@ article {
     border-radius: 4px;
     border: 1px solid #ccc;
     display: flex;
-    width: 70%;
+    width: 85%;
 }
 
 .form-style input:focus {

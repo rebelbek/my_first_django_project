@@ -8,7 +8,7 @@
 </head>
 <body>
     {% include 'includes/navbar_top.html' %}
-    <br>
+    <br><br>
     <h2>{{deal}}</h2>
     <form action="{% url 'stock_update' deal.stock.secid %}" method="POST">
         {% csrf_token %}
