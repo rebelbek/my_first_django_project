@@ -10,5 +10,5 @@ python manage.py crontab remove
 python manage.py crontab add
 service cron start
 python manage.py migrate
-#python manage.py collectstatic --no-input
+python manage.py collectstatic --no-input
 gunicorn py_dd.wsgi:application --bind 0.0.0.0:8000
