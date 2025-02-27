@@ -95,3 +95,11 @@ def show_update_logs(request):
     logs = CronLogs.objects.all()[:20]
     context = {'logs': logs}
     return render(request, 'stocks/logs.html', context=context)
+
+def get_resume(request):
+    resume_path = f'resume/Aubakirov_resume.pdf'
+    file = open(resume_path, 'rb')
+    response = HttpResponse(file.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f"attachment; filename='Aubakirov_resume.pdf'"
+    file.close()
+    return response
