@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from django.conf.global_settings import DATABASES, AUTH_USER_MODEL
 from dotenv import load_dotenv
 import os
 import sys
@@ -172,4 +171,14 @@ CSRF_TRUSTED_ORIGINS = str(os.getenv('CSRF_TRUSTED_ORIGINS')).split(' ')
 DEBUG_TOOLBAR_CONFIG = {
     'UPDATE_ON_FETCH': True,
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
+
 

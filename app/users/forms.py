@@ -4,9 +4,13 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Email')
+    password1 = forms.CharField(required=True, max_length=30, label='Пароль', min_length=8)
+    password2 = forms.CharField(required=True, max_length=30, label='Повторите пароль')
+
     class Meta:
         model = User
-        fields = UserCreationForm.Meta.fields
+        fields = ('email', 'password1', 'password2')
 
 
 class AddStocksForm(forms.Form):

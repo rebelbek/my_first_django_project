@@ -10,7 +10,7 @@
             <li><a href="{% url 'notifications' %}">Уведомления</a></li>
         {% endif %}
         <li><a href="{% url 'reports' %}">Отчеты</a></li>
-        {% if user.is_superuser %}
+        {% if user.is_admin %}
         <li><a href="{% url 'stocks_delete' %}">Очистить</a></li>
         <li><a href="{% url 'stocks_download' %}">Загрузить</a></li>
         {% endif %}

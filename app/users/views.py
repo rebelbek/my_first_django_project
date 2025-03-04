@@ -9,7 +9,7 @@ from django.db.models import F, Sum
 from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_http_methods
 from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
-from .models import DealInfo
+from .models import DealInfo, User
 from stocks.forms import DealForm
 from stocks.models import Stocks
 from stocks.scripts.make_reports import ReportsMaker
@@ -121,6 +121,17 @@ class SignUp(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+
+def verify(request, uuid):
+    try:
+        user = User.objects.get(verification_uuid=uuid, is_verified=False)
+    except User.DoesNotExist:
+        raise Http404("Пользователь не существует или уже создан")
+
+    user.is_verified = True
+    user.save()
+    return render(request, 'registration/activate.html')
 
 
 @login_required

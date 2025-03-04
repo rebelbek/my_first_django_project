@@ -59,7 +59,7 @@ def stock_list_sort(request, filter_field, direction):
 
 @login_required
 def stocks_delete(request):
-    if request.user.is_superuser:
+    if request.user.is_admin:
         with (connection.cursor() as cursor):
             cursor.execute("delete from stocks_stocks")
         cache.delete('cached_stocks')
@@ -70,7 +70,7 @@ def stocks_delete(request):
 
 @login_required
 def stocks_download(request):
-    if request.user.is_superuser:
+    if request.user.is_admin:
         Stocks.download()
         cache.delete('cached_stocks')
         cache.delete('stocks_count')
@@ -79,7 +79,7 @@ def stocks_download(request):
 
 
 def stocks_update(request):
-    if request.user.is_superuser:
+    if request.user.is_admin:
         Stocks.update_all()
         redirect_url = reverse('stocks_main')
         return HttpResponseRedirect(redirect_url)

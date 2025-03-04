@@ -1,10 +1,9 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from .models import DealInfo, User
 
 # Register your models here.
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(admin.ModelAdmin):
     pass
 
 class UserDealAdmin(admin.ModelAdmin):
