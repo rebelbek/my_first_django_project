@@ -19,13 +19,12 @@ from stocks.scripts.make_reports import ReportsMaker
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
 date_today = datetime.datetime.today().strftime('%d-%m-%Y')
-deals_fields_to_show = ['тикер', 'дата сделки', 'полное название', 'кол-во акций', 'цена покупки',
-                        'потрачено', 'цена текущая', 'стоимость', 'прибыль', 'X']
 
 def check_borders(request):
     DealInfo.check_borders()
     redirect_url = reverse('cabinet')
     return HttpResponseRedirect(redirect_url)
+
 
 @login_required
 def deal_add(request, secid: str):
@@ -38,7 +37,7 @@ def deal_add(request, secid: str):
                             stock=stock,
                             quantity=cd['quantity'],
                             buy_price=cd['buy_price'],
-                            custom_secname=stock.secname)
+                            custom_name=stock.shortname)
             deal.save()
     redirect_url = reverse('cabinet')
     return HttpResponseRedirect(redirect_url)
@@ -80,10 +79,10 @@ def cabinet(request):
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
     date_moscow = datetime.datetime.now(offset)
     context = {'form': form,
+               'user': user,
                'deals': deals,
                'new_notification': new_notification,
                'agg': agg,
-               'deals_fields': deals_fields_to_show,
                'msc_time': date_moscow}
     return render(request, 'users/cabinet.html', context=context)
 
@@ -162,9 +161,7 @@ def get_reports(request, model: str, format_file: str):
         values = [[round(i, 2) if isinstance(i, float) else i for i in deal] for deal in deals]
         additional = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
         ReportsMaker(values, deals_content_fields, model, format_file, reports_path, additional).write_to_file()
-    file = open(reports_path, 'rb')
-    # return FileResponse(file, as_attachment=True, filename=filename)
-    response = HttpResponse(file.read(), content_type=f'application/{format_file}')
-    response['Content-Disposition'] = f'attachment; filename={filename}'
-    file.close()
+    with  open(reports_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type=f'application/{format_file}')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
     return response

@@ -21,15 +21,15 @@ class AddStocksForm(forms.Form):
 class DealInfoForm(forms.ModelForm):
     class Meta:
         model = DealInfo
-        fields = ['custom_secname', 'use_custom', 'quantity', 'buy_price']
+        fields = ['custom_name', 'use_custom', 'quantity', 'buy_price']
         labels = {
-            'custom_secname': 'Название',
+            'custom_name': 'Название',
             'use_custom': 'Отображать ваше название',
             'quantity': 'Количество акций',
             'buy_price': 'Цена покупки 1 акции',
         }
         error_messages = {
-            'custom_secname': {
+            'custom_name': {
                 'min_length': 'Меньше 3 символов',
                 'max_length': 'Больше 40 символов',
                 'required': 'Не должно быть пустым',

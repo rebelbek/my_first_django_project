@@ -98,8 +98,7 @@ def show_update_logs(request):
 
 def get_resume(request):
     resume_path = f'resume/Aubakirov_resume.pdf'
-    file = open(resume_path, 'rb')
-    response = HttpResponse(file.read(), content_type='application/pdf')
-    response['Content-Disposition'] = f"attachment; filename='Aubakirov_resume.pdf'"
-    file.close()
+    with open(resume_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f"attachment; filename='Aubakirov_resume.pdf'"
     return response

@@ -4,7 +4,7 @@
 <head>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <meta charset="UTF-8">
-    <title>Личный кабинет {{user.username}}</title>
+    <title>{{user.email}}</title>
 </head>
 <body id="body" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
                 hx-get="{% url 'cabinet' %}"
@@ -25,14 +25,15 @@
     <h3>Чтобы добавить позицию, перейдите в тикер акции на <a href="/">главной</a> странице</h3>
     <table class="table">
         <tr>
-            <td><b>№</b></td>
-            {% for item in deals_fields %}
-                {% if item == 'полное название' %}
-                    <td style="width: 20%;"><b>{{item|capfirst}}</b></td>
-                {% else %}
-                    <td><b>{{item|capfirst}}</b></td>
-                {% endif %}
-            {% endfor %}
+            <td style="width: 4%";><b>№</b></td>
+            <td style="width: 6%"><b>Тикер</b></td>
+            <td><b>Дата сделки</b></td>
+            <td style="width: 15%;"><b>Название</b></td>
+            <td style="width: 6%"><b>Кол-во акций</b></td>
+            <td><b>Цена / Сумма покупки</b></td>
+            <td><b>Цена / Сумма текущая</b></td>
+            <td><b>Прибыль</b></td>
+            <td style="width: 4%"><b>X</b></td>
         </tr>
         {% for deal in deals %}
         <tr>
@@ -40,15 +41,13 @@
             <td><b><a href = "{% url 'deal_detail' deal.id %}">{{deal.stock.secid}}</a></b></td>
             <td><b>{{deal.date|date:"d.m.y"}}</b></td>
             {% if deal.use_custom %}
-                <td><b>{{deal.custom_secname}}</b></td>
+                <td><b>{{deal.custom_name}}</b></td>
             {% else %}
-                <td><b>{{deal.stock.secname}}</b></td>
+                <td><b>{{deal.stock.shortname}}</b></td>
             {% endif %}
             <td><b>{{deal.quantity}}</b></td>
-            <td><b>{{deal.buy_price|floatformat:2}}</b></td>
-            <td><b>{{deal.cost|floatformat:2}}</b></td>
-            <td><b>{{deal.stock.last|floatformat:2}}</b></td>
-            <td><b>{{deal.value|floatformat:2}}</b></td>
+            <td><b>{{deal.buy_price|floatformat:2}} / {{deal.cost|floatformat:2}}</b></td>
+            <td><b>{{deal.stock.last|floatformat:2}} / {{deal.value|floatformat:2}}</b></td>
             {% if deal.profit > 0 %}
                 <td style="background-color: #4eb45a"><b>{{deal.profit|floatformat:2}}</b></td>
             {% elif deal.profit < 0 %}
