@@ -1,4 +1,4 @@
-Django==5.1.5
+Django==4.2.19
 django-crontab==0.7.1
 django-debug-toolbar==5.0.1
 django-extensions==3.2.3
