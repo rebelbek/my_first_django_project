@@ -1,5 +1,4 @@
 import datetime
-
 from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
