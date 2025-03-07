@@ -1,4 +1,6 @@
 import datetime
+
+from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -121,6 +123,9 @@ class SignUp(CreateView):
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
+
+class MyPasswordResetView(PasswordResetView):
+    template_name = "registration/password_reset.html"
 
 def verify(request, uuid):
     try:

@@ -6,6 +6,7 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('check-borders', views.check_borders, name='check_borders'),
     path('signup/', views.SignUp.as_view(), name='signup'),
+    path('password-reset/', views.MyPasswordResetView.as_view(), name='password_reset'),
     path('deal-detail/<int:pk>', views.deal_detail, name='deal_detail'),
     path('deal-add/<str:secid>', views.deal_add, name='deal_add'),
     path('stocks-add/<int:pk>', views.stocks_add, name='stocks_add'),

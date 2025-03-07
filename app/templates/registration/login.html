@@ -17,9 +17,9 @@
 			<div>
 			    {{form.errors}}
 				<input type="submit" value="Войти" />
-<!--				<a href="#">Lost your password?</a>-->
 				<a href="{% url 'signup' %}">Регистрация</a>
 				<a href="/">Главная</a>
+				<br><a href="{% url 'password_reset' %}">Забыли свой пароль ?</a>
 			</div>
 		</form>
 {% endblock %}

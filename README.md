@@ -16,7 +16,7 @@ get_random_secret_key()
 Заполнить файл **.env** как в файле **.env.example**.
 Значения которые начинаются с "YOUR" настраиваете сами.
 
-В каталоге nginx нужно переименовать файл py_dd.emample.conf в py_dd.conf
+В каталоге nginx нужно переименовать файл py_dd.example.conf в py_dd.conf
 
 ## Запуск
 
