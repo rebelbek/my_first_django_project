@@ -13,7 +13,10 @@
 from django.core.management.utils import get_random_secret_key
 get_random_secret_key()
 ```
-Остальные значения придумываете сами.
+Заполнить файл **.env** как в файле **.env.example**.
+Значения которые начинаются с "YOUR" настраиваете сами.
+
+В каталоге nginx нужно переименовать файл py_dd.emample.conf в py_dd.conf
 
 ## Запуск
 

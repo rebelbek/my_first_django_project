@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import sys
 
 load_dotenv()
 
@@ -130,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG: #sys.argv[1] == 'runserver':
+if sys.argv[1] == 'runserver':
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')

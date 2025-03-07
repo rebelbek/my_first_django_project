@@ -3,4 +3,4 @@
 .idea
 *__pycache__
 *Aubakirov_resume.pdf
-nginx/default.conf
+nginx/py_dd.conf
