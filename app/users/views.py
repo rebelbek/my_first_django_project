@@ -76,8 +76,10 @@ def cabinet(request):
         form_user_mail = UserMailForm(request.POST, instance=user)
         if form_user_mail.is_valid():
             form_user_mail.save()
+            redirect_url = reverse('cabinet')
+            return HttpResponseRedirect(redirect_url)
     else:
-        form_user_mail = UserMailForm()
+        form_user_mail = UserMailForm(instance=user)
     deals = user.dealinfo_set.all().annotate(
         cost=F('quantity') * F('buy_price'),
         value=F('quantity') * F('stock__last'),
@@ -104,11 +106,11 @@ def deal_detail(request, pk: int):
         form_set = DealSetBorderForm(request.POST, instance=deal)
         if form.is_valid():
             form.save()
-            redirect_url = reverse(f'deal_detail', args=[pk])
+            redirect_url = reverse('deal_detail', args=[pk])
             return HttpResponseRedirect(redirect_url)
         if form_set.is_valid():
             form_set.save()
-            redirect_url = reverse(f'deal_detail', args=[pk])
+            redirect_url = reverse('deal_detail', args=[pk])
             return HttpResponseRedirect(redirect_url)
     else:
         form = DealInfoForm(instance=deal)
