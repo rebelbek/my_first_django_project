@@ -27,14 +27,16 @@
     <tr>
         <td style="width: 60%;">Текст Сообщения</td>
         <td>Дата</td>
-        <td>Прочитано</td>
         <td>Удалить</td>
     </tr>
     {% for notificate in notifications %}
     <tr>
+        {% if not notificate.delivered %}
+        <td style="background-color: #4eb45a;">{{notificate.text}}</td>
+        {% else %}
         <td>{{notificate.text}}</td>
+        {% endif %}
         <td>{{notificate.date|date:"d.m.Y H:i"}}</td>
-        <td>{{notificate.delivered}}</td>
         <td><a href="{% url 'notification_delete' notificate.id %}">X</a></td>
     </tr>
     {% endfor %}

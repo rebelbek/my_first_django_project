@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.core.mail import send_mail
 import uuid
@@ -6,6 +7,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from stocks.models import Stocks, CronLogs
 from notifications.models import NotificationUser
 from django.db.models import Q
+
+offset = datetime.timezone(datetime.timedelta(hours=3))
 
 
 class UserAccountManager(BaseUserManager):
@@ -89,47 +92,32 @@ class DealInfo(models.Model):
         return self.custom_name
 
     @staticmethod
-    def send_notif_email(user, name, text):
-        if user.is_verified:
-            send_mail(
-                subject=f'Уведомление {name}',
-                message=text,
-                from_email='rebelbek.stocks@mail.ru',
-                recipient_list=[user.email],
-                fail_silently=False)
+    def send_notification(deal, border, border_name):
+        text = f'Достигнута {border_name} граница {border} для позиции {deal.custom_name} ({datetime.datetime.now(offset).strftime("%Y-%m-%d %H:%M:%S")} MSK+0 (UTC+3))'
+        notification = NotificationUser(user=deal.user,
+                                        text=text)
+        if border_name == 'верхняя':
+            deal.upper_border = None
+        else:
+            deal.lower_border = None
+        deal.save()
+        notification.save()
+        if deal.user.is_receive_mail and deal.user.is_verified:
+            send_mail(subject=f'Оповещение {deal.custom_name}',
+                      message=text,
+                      from_email='rebelbek.stocks@mail.ru',
+                      recipient_list=[deal.user.email],
+                      fail_silently=False)
 
     @classmethod
     def check_borders(cls):
         CronLogs.objects.create(func='check_borders')
-        for deal in cls.objects.exclude(Q(upper_border=None) | Q(lower_border=None)):
+        # for deal in cls.objects.filter(~Q(upper_border=None) | ~Q(lower_border=None)):
+        for deal in cls.objects.all():
             if deal.upper_border:
                 if deal.stock.last >= deal.upper_border:
-                    text = f'Достигнута верхняя граница {deal.upper_border} для позиции {deal.custom_name}'
-                    notification = NotificationUser(user=deal.user,
-                                                    text=text)
-                    deal.upper_border = None
-                    deal.save()
-                    notification.save()
-                    if deal.user.is_receive_mail():
-                        try:
-                            cls.send_notif_email(user=deal.user,
-                                                 name=deal.custom_name,
-                                                 text=text)
-                        except:
-                            CronLogs.objects.create(func='check_borders_exception')
-
+                    cls.send_notification(deal, deal.upper_border, 'верхняя')
             if deal.lower_border:
                 if deal.stock.last <= deal.lower_border:
-                    text = f'Достигнута нижняя граница {deal.lower_border} для позиции {deal.custom_name}'
-                    notification = NotificationUser(user=deal.user,
-                                                    text=text)
-                    deal.lower_border = None
-                    deal.save()
-                    notification.save()
-                    if deal.user.is_receive_mail():
-                        try:
-                            cls.send_notif_email(user=deal.user,
-                                                 name=deal.custom_name,
-                                                 text=text)
-                        except:
-                            CronLogs.objects.create(func='check_borders_exception')
+                    cls.send_notification(deal, deal.lower_border, 'нижняя')
+
