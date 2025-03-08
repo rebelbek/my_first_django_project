@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Отправлено</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+<h3>Мы отправили вам ссылку для подтверждения электронной почты на ваш адрес электронной почты. Вы должны получить ее в ближайшее время.</h3>
+<h3>Если вы не получили письмо, проверьте папку со спамом.</h3>
+<a href="{% url 'cabinet' %}">Вернуться</a>
+</body>
+</html>

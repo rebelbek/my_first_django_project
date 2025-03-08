@@ -1,9 +1,10 @@
 import datetime
+from django.core.mail import send_mail
 from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserMailForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum
@@ -69,8 +70,14 @@ def deal_delete(request, pk: int):
 
 @login_required
 def cabinet(request):
-    form = DealForm()
     user = request.user
+    form = DealForm()
+    if request.method == 'POST':
+        form_user_mail = UserMailForm(request.POST, instance=user)
+        if form_user_mail.is_valid():
+            form_user_mail.save()
+    else:
+        form_user_mail = UserMailForm()
     deals = user.dealinfo_set.all().annotate(
         cost=F('quantity') * F('buy_price'),
         value=F('quantity') * F('stock__last'),
@@ -82,6 +89,7 @@ def cabinet(request):
     context = {'form': form,
                'user': user,
                'deals': deals,
+               'form_user_mail': form_user_mail,
                'new_notification': new_notification,
                'agg': agg,
                'msc_time': date_moscow}
@@ -125,6 +133,22 @@ class SignUp(CreateView):
 
 class MyPasswordResetView(PasswordResetView):
     template_name = "registration/password_reset.html"
+
+
+def send_email_to_verify(request):
+    user = request.user
+    send_mail(subject='Подтвердите электронную почту',
+              message='Нажмите на ссылку чтобы подтвердить вашу электронную почту: '
+                      'http://rebelbek.ru%s' % reverse('verify', kwargs={'uuid': str(user.verification_uuid)}),
+              from_email='rebelbek.stocks@mail.ru',
+              recipient_list=[user.email],
+              fail_silently=False)
+    redirect_url = reverse('send_email_to_verify_done')
+    return HttpResponseRedirect(redirect_url)
+
+
+def send_email_to_verify_done(request):
+    return render(request, 'users/send_email_to_verify_done.html')
 
 def verify(request, uuid):
     try:

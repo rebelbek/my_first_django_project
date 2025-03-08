@@ -35,7 +35,7 @@ class Stocks(models.Model):
     open = models.FloatField(null=True)
     low = models.FloatField(null=True)
     high = models.FloatField(null=True)
-    last = models.FloatField(null=True)
+    last = models.FloatField(null=True, blank=True, default='')
     value = models.FloatField(null=True)
     value_usd = models.FloatField(null=True)
     waprice = models.FloatField(null=True)
@@ -61,6 +61,8 @@ class Stocks(models.Model):
         CronLogs.objects.create(func='stocks_update')
         stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         for item in stocks_fields:
+            if item['last'] is None:
+                del item['last']
             cls.objects.update_or_create(secid=item['secid'], defaults=item)
 
     @classmethod

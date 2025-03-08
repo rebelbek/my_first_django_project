@@ -9,11 +9,11 @@ body {
 }
 
 p{
-    color: #6464d2;
+    color: #224965;
 }
 
 form {
-    color: #6464d2;
+    color: #224965;
 }
 
 input[type="checkbox"] {
@@ -33,7 +33,7 @@ input[type="checkbox"] {
 
 h2{
     width:90%;
-    color: #3c759e;
+    color: #224965;
     font-size: 2rem;
     -webkit-text-stroke: 0.5px black;
     text-stroke: 1px #6b62ba;
@@ -44,9 +44,9 @@ h2{
 }
 
 h3{
-    color: #3c759e;
+    color: #224965;
     font-size: 1.2rem;
-    margin: 20px auto 5px;
+    margin: 10px auto 5px;
     padding: 5px;
     border-radius: 5px;
 }
@@ -121,7 +121,7 @@ main {
 }
 
 aside {
-    color: #6464d2;
+    color: #224965;
     -webkit-text-stroke: 0.3px black;
     margin: 1px;
     padding:5px;
@@ -132,7 +132,7 @@ aside {
 }
 
 article {
-    color: #6464d2;
+    color: #224965;
     background-color: transparent;
     padding: 20px;
     width: 40%;
@@ -161,7 +161,7 @@ article {
 }
 
 .form-style label {
-    color: #6464d2;
+    color: #224965;
     font-weight: bold;
     display: block;
     margin-bottom: 0.3rem;

@@ -36,11 +36,12 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    first_name = models.CharField(verbose_name='first name', max_length=30, blank=True)
-    last_name = models.CharField(verbose_name='last name', max_length=30, blank=True)
+    # first_name = models.CharField(verbose_name='first name', max_length=30, blank=True)
+    # last_name = models.CharField(verbose_name='last name', max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_verified = models.BooleanField('verified', default=False)
+    is_receive_mail = models.BooleanField(default=False)
     verification_uuid = models.UUIDField('Unique Verification UUID', default=uuid.uuid4)
 
     objects = UserAccountManager()
@@ -109,12 +110,13 @@ class DealInfo(models.Model):
                     deal.upper_border = None
                     deal.save()
                     notification.save()
-                    try:
-                        cls.send_notif_email(user=deal.user,
-                                             name=deal.custom_name,
-                                             text=text)
-                    except:
-                        CronLogs.objects.create(func='check_borders_exception')
+                    if deal.user.is_receive_mail():
+                        try:
+                            cls.send_notif_email(user=deal.user,
+                                                 name=deal.custom_name,
+                                                 text=text)
+                        except:
+                            CronLogs.objects.create(func='check_borders_exception')
 
             if deal.lower_border:
                 if deal.stock.last <= deal.lower_border:
@@ -124,9 +126,10 @@ class DealInfo(models.Model):
                     deal.lower_border = None
                     deal.save()
                     notification.save()
-                    try:
-                        cls.send_notif_email(user=deal.user,
-                                             name=deal.custom_name,
-                                             text=text)
-                    except:
-                        CronLogs.objects.create(func='check_borders_exception')
+                    if deal.user.is_receive_mail():
+                        try:
+                            cls.send_notif_email(user=deal.user,
+                                                 name=deal.custom_name,
+                                                 text=text)
+                        except:
+                            CronLogs.objects.create(func='check_borders_exception')

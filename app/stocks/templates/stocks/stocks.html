@@ -9,9 +9,9 @@
 <body>
 {% include 'includes/navbar_top.html' %}
 <br><br>
-    <h3 style="text-align: center;">{{msc_time}} (Москва)</h3>
+    <h3 style="text-align: center;">{{msc_time}} MSK+0 (UTC+3)</h3>
      <a href="#top" id="back-to-top" class="back-to-top" title="Back to top">▲</a>
-<table>
+<table style="margin-left: auto; margin-right: auto;">
     <tr>
     <td><form action="{% url 'stocks_main' %}" method="GET">
         {{form.input.label_tag}}
@@ -21,9 +21,9 @@
     <td><form action="{% url 'stocks_main' %}">
         <button type="submit" class="btn3">Сброс</button>
     </form></td>
+    <td style="padding-left:10px;"><p>Всего акций: {{stocks_count}}</p></td>
     </tr>
 </table>
-<p>Всего акций: {{stocks_count}}</p>
 <table class="table">
     <tr>
     <td style="width: 5%;"><b>№</b></td>

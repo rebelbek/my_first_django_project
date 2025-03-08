@@ -5,9 +5,9 @@
     {% if user.is_active %}
         <li><a href="{% url 'cabinet' %}">Личный кабинет</a></li>
         {% if user.new_notifications %}
-            <li><a style="background: green" href="{% url 'notifications' %}">Уведомления</a></li>
+            <li><a style="background: green" href="{% url 'notifications' %}">Оповещения</a></li>
         {% else %}
-            <li><a href="{% url 'notifications' %}">Уведомления</a></li>
+            <li><a href="{% url 'notifications' %}">Оповещения</a></li>
         {% endif %}
         <li><a href="{% url 'reports' %}">Отчеты</a></li>
         {% if user.is_admin %}

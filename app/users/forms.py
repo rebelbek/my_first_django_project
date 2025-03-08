@@ -50,3 +50,10 @@ class DealSetBorderForm(forms.ModelForm):
         super(DealSetBorderForm, self).__init__(*args, **kwargs)
         self.fields['upper_border'].required = False
         self.fields['lower_border'].required = False
+
+
+class UserMailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['is_receive_mail']
+        labels = {'is_receive_mail': 'Получать оповещения по почте'}

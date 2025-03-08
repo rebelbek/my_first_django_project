@@ -6,8 +6,8 @@ from django.urls import reverse
 
 
 @receiver(post_save, sender=User)
-def user_update(sender, instance, *args, **kwargs):
-    if not instance.is_verified:
+def user_update(sender, instance, created, *args, **kwargs):
+    if created:
         send_mail(subject='Подтвердите электронную почту',
             message='Нажмите на ссылку чтобы подтвердить вашу электронную почту: '
             'http://rebelbek.ru%s' % reverse('verify', kwargs={'uuid': str(instance.verification_uuid)}),
