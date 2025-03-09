@@ -16,10 +16,6 @@
     </form>
 <main>
 <table class="table">
-    <tr>
-        <td><b>Столбец</b></td>
-        <td><b>Название</b></td>
-    </tr>
     {% for key, value in values_list %}
     <tr>
         <td>{{key|title}}</td>
@@ -28,7 +24,11 @@
     {% for key, value in values_stock_list %}
     <tr>
         <td>{{key|title}}</td>
-        <td>{{value}}</td>
+        {% if key == 'last' %}
+        <td style="background-color: #4eb45a;"><b>{{value}}</b></td>
+        {% else %}
+        <td><b>{{value}}</b></td>
+        {% endif %}
     {% endfor %}
     </tr>
 </table>

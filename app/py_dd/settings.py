@@ -152,7 +152,7 @@ LOGIN_REDIRECT_URL = 'cabinet'
 LOGOUT_REDIRECT_URL = 'login'
 
 CRONJOBS = [
-    ('* 5-22 * * 1-5', 'stocks.cron.update_stocks'),
+    ('*/5 5-22 * * 1-5', 'stocks.cron.update_stocks'),
     ('0 23 * * 1-5', 'stocks.cron.delete_logs')
 ]
 
