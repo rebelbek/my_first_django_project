@@ -41,18 +41,9 @@
         <div class="form-style {% if field.errors %} errors {% endif %}">
             {{form}}
         </div>
-
         <button type="submit" class="btn">Сохранить</button>
     </form>
-    <h2>Для оповещения:</h2>
-    <form action="" method="POST" class="change">
-        {% csrf_token %}
-        <div class="form-style {% if field.errors %} errors {% endif %}">
-            {{form_set}}
-        </div>
 
-        <button type="submit" class="btn">Сохранить</button>
-    </form>
     <h2>Добавить акции:</h2>
     <form action="{% url 'stocks_add' deal.id %}" method="POST" class="change">
         {% csrf_token %}

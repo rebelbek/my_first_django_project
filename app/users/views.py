@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum
 from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_http_methods
-from .forms import AddStocksForm, DealInfoForm, DealSetBorderForm
+from .forms import AddStocksForm, DealInfoForm
 from .models import DealInfo, User
 from stocks.forms import DealForm
 from stocks.models import Stocks
@@ -104,18 +104,12 @@ def deal_detail(request, pk: int):
     deal = get_object_or_404(DealInfo, pk=pk)
     if request.method == 'POST':
         form = DealInfoForm(request.POST, instance=deal)
-        form_set = DealSetBorderForm(request.POST, instance=deal)
         if form.is_valid():
             form.save()
             redirect_url = reverse('deal_detail', args=[pk])
             return HttpResponseRedirect(redirect_url)
-        if form_set.is_valid():
-            form_set.save()
-            redirect_url = reverse('deal_detail', args=[pk])
-            return HttpResponseRedirect(redirect_url)
     else:
         form = DealInfoForm(instance=deal)
-        form_set = DealSetBorderForm(instance=deal)
     form_add = AddStocksForm()
     values_list = list(deal.__dict__.items())[4:]
     values_stock_list = list(deal.stock.__dict__.items())[2:]
@@ -123,7 +117,7 @@ def deal_detail(request, pk: int):
                'values_stock_list': values_stock_list,
                'deal': deal,
                'form': form,
-               'form_set': form_set,
+               # 'form_set': form_set,
                'form_add': form_add}
     return render(request, 'users/deal_detail.html', context=context)
 
