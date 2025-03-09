@@ -19,17 +19,17 @@
     {% endif %}
 <main>
 <table class="table">
-    <tr>
-        <td><b>Столбец</b></td>
-        <td><b>Название</b></td>
-    </tr>
     <tbody hx-get="{% url 'stock_detail' stock.secid %}"
            hx-trigger="every 60s"
            hx-target="closest tbody">
     {% for key, value in values_list %}
     <tr>
         <td><b>{{key|title}}</b></td>
+        {% if key == 'last' %}
+        <td style="background-color: #4eb45a;"><b>{{value}}</b></td>
+        {% else %}
         <td><b>{{value}}</b></td>
+        {% endif %}
     </tr>
     {% endfor %}
     </tbody>

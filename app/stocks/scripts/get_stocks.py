@@ -22,7 +22,8 @@ def get_data_for_all(data: dict, stocks_fields: list) -> list[dict]:
         for key, value in rows.items():
             if key[1:].lower() in stocks_fields:
                 if not value:
-                    tmp_dict[key[1:].lower()] = None
+                    # tmp_dict[key[1:].lower()] = None
+                    continue
                 elif value.isdigit():
                     tmp_dict[key[1:].lower()] = int(value)
                 else:
@@ -39,7 +40,8 @@ def get_data_for_one(data: dict, stock_fields: dict) -> dict:
      for key, value in data['rows']['row'].items():
          if key[1:].lower() in stock_fields:
              if not value:
-                 result[key[1:].lower()] = None
+                 # result[key[1:].lower()] = None
+                continue
              elif value.isdigit():
                  result[key[1:].lower()] = int(value)
              else:

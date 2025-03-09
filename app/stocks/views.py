@@ -12,7 +12,7 @@ from .forms import SearchForm, DealForm
 # Create your views here.
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
-stocks_fields_to_show = {'тикер': 'secid', 'короткое название': 'shortname', 'кол-во акций': 'issuesize',
+stocks_fields_to_show = {'тикер': 'secid', 'название': 'shortname', 'кол-во акций': 'issuesize',
                          'размер лота': 'lotsize', 'цена 1 акции': 'last'}
 
 
