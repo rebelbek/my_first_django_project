@@ -10,10 +10,12 @@
     {% include 'includes/navbar_top.html' %}
     <br><br>
     <h2>{{deal.stock.secname}}</h2>
+    {% if deal.user.is_admin %}
     <form action="{% url 'stock_update' deal.stock.secid %}" method="POST">
         {% csrf_token %}
         <button class="btn2">Обновить данные</button>
     </form>
+    {% endif %}
 <main>
 <table class="table">
     {% for key, value in values_list %}
