@@ -81,7 +81,7 @@ class DealInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     stock = models.ForeignKey(Stocks, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
-    buy_price = models.IntegerField()
+    buy_price = models.FloatField(null=True, blank=True)
     date = models.DateField(auto_now_add=True)
     upper_border = models.FloatField(default=None, null=True)
     lower_border = models.FloatField(default=None, null=True)
