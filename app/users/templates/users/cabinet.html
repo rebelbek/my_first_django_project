@@ -42,7 +42,7 @@
             <td style="width: 8%"><b>Кол-во акций</b></td>
             <td><b>Цена | Сумма покупки</b></td>
             <td><b>Цена | Сумма текущая</b></td>
-            <td><b>Прибыль</b></td>
+            <td><b>Прибыль | %</b></td>
             <td style="width: 3%"><b>X</b></td>
         </tr>
         {% for deal in deals %}
@@ -59,11 +59,11 @@
             <td><b>{{deal.buy_price|floatformat:2}} | {{deal.cost|floatformat:2}}</b></td>
             <td><b>{{deal.stock.last|floatformat:2}} | {{deal.value|floatformat:2}}</b></td>
             {% if deal.profit > 0 %}
-                <td style="background-color: #4eb45a"><b>{{deal.profit|floatformat:2}}</b></td>
+                <td style="background-color: #4eb45a"><b>{{deal.profit|floatformat:2}} | {{deal.percent|floatformat:2}}%</b></td>
             {% elif deal.profit < 0 %}
-                <td style="background-color: #ff6b6b"><b>{{deal.profit|floatformat:2}}</b></td>
+                <td style="background-color: #ff6b6b"><b>{{deal.profit|floatformat:2}} | {{deal.percent|floatformat:2}}%</b></td>
             {% else %}
-                <td><b>{{deal.profit|floatformat:2}}</b></td>
+                <td><b>{{deal.profit|floatformat:2}} | {{deal.percent|floatformat:2}}%</b></td>
             {% endif %}
             <td><b><button
                     hx-delete="{% url 'deal_delete' deal.id %}"
