@@ -12,8 +12,8 @@ from .forms import SearchForm, DealForm
 # Create your views here.
 
 offset = datetime.timezone(datetime.timedelta(hours=3))
-stocks_fields_to_show = {'тикер': 'secid', 'название': 'shortname', 'кол-во акций': 'issuesize',
-                         'размер лота': 'lotsize', 'цена 1 акции': 'last'}
+stocks_fields_to_show = {'тикер': 'secid', 'название': 'shortname', 'кол-во': 'issuesize',
+                         'размер лота': 'lotsize', 'цена акции': 'last'}
 
 
 def stocks_main(request):
