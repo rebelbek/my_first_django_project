@@ -153,7 +153,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 CRONJOBS = [
     ('*/5 5-22 * * *', 'stocks.cron.update_stocks'),
-    ('0 23 * * *', 'stocks.cron.delete_logs')
+    ('0 5 * * *', 'stocks.cron.delete_logs')
 ]
 
 CACHES = {
