@@ -117,7 +117,6 @@ def deal_detail(request, pk: int):
                'values_stock_list': values_stock_list,
                'deal': deal,
                'form': form,
-               # 'form_set': form_set,
                'form_add': form_add}
     return render(request, 'users/deal_detail.html', context=context)
 

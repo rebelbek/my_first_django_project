@@ -61,8 +61,6 @@ class Stocks(models.Model):
         CronLogs.objects.create(func='stocks_update')
         stocks_fields = get_stocks_dict(list(cls.__dict__.keys()))
         for item in stocks_fields:
-            if item['last'] is None:
-                del item['last']
             cls.objects.update_or_create(secid=item['secid'], defaults=item)
 
     @classmethod
