@@ -168,12 +168,12 @@ def get_reports(request, model: str, format_file: str):
         return Http404
     filename = f'{model}_{date_today}.{format_file}'
     reports_path = f'reports/{format_file}/{filename}'
-    stocks_content_fields = ['№', 'Тикер', 'Полное название', 'Кол-во акций',
+    stocks_content_fields = ['№', 'Тикер', 'Название', 'Кол-во акций',
                              'Размер лота', 'Цена 1 акции']
-    deals_content_fields = ['№', 'Тикер', 'Кол-во акций', 'Цена покупки',
+    deals_content_fields = ['№', 'Тикер', 'Кол-во', 'Цена покупки',
                             'Потрачено', 'Стоимость', 'Прибыль']
     if model == 'stocks':
-        values = list(Stocks.objects.all().values_list('secid', 'secname', 'issuesize', 'lotsize', 'last'))
+        values = list(Stocks.objects.all().values_list('secid', 'shortname', 'issuesize', 'lotsize', 'last'))
         ReportsMaker(values, stocks_content_fields, model, format_file, reports_path).write_to_file()
     if model == 'deals':
         deals = request.user.dealinfo_set.all().annotate(
