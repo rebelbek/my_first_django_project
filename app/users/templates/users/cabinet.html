@@ -20,8 +20,9 @@
     <h3 style="text-align: center;">{{msc_time}} MSK+0 (UTC+3)</h3>
     <br>
     {% if new_notification %}
-        <h3>У вас есть непрочитанные уведомления !</h3>
+        <p><b>У вас есть непрочитанные уведомления !</b></p>
     {% endif %}
+    <br>
     {% if user.is_verified %}
     <form action="" method="POST">
         {% csrf_token %}
