@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import DEFAULT_FROM_EMAIL
+# from django.conf.global_settings import DEFAULT_FROM_EMAIL
 from dotenv import load_dotenv
 import os
 import sys
@@ -148,6 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/my_gallery/'
 
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'cabinet'
 LOGOUT_REDIRECT_URL = 'login'
 
