@@ -154,6 +154,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 CRONJOBS = [
     ('*/10 5-20 * * *', 'stocks.cron.update_stocks'),
+    # ('* 5-20 * * *', 'stocks.cron.update_stocks'),
     ('0 4 * * *', 'stocks.cron.delete_logs')
 ]
 

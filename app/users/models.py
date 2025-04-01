@@ -112,8 +112,7 @@ class DealInfo(models.Model):
     @classmethod
     def check_borders(cls):
         CronLogs.objects.create(func='check_borders')
-        # for deal in cls.objects.filter(~Q(upper_border=None) | ~Q(lower_border=None)):
-        for deal in cls.objects.all():
+        for deal in cls.objects.filter(~Q(upper_border=None) | ~Q(lower_border=None)):
             if deal.upper_border:
                 if deal.stock.last >= deal.upper_border:
                     cls.send_notification(deal, deal.upper_border, 'верхняя')
