@@ -85,7 +85,7 @@ def cabinet(request):
         value=F('quantity') * F('stock__last'),
         profit=F('value') - F('cost'),
         percent=(F('stock__last') - F('buy_price'))/F('buy_price') * 100
-    )
+    ).order_by('-value')
     new_notification = user.new_notifications()
     agg = deals.aggregate(Sum('cost'), Sum('value'), Sum('profit'))
     date_moscow = datetime.datetime.now(offset)
