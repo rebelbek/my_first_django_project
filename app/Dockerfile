@@ -1,5 +1,5 @@
 # pull the official base image
-FROM python:latest
+FROM python:3.12.10-bookworm
 
 # set work directory
 WORKDIR /home/app/web

@@ -26,7 +26,6 @@ class UserAccountManager(BaseUserManager):
         user = self.create_user(
             email,
             password=password, **extra_fields
-
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -39,8 +38,6 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    # first_name = models.CharField(verbose_name='first name', max_length=30, blank=True)
-    # last_name = models.CharField(verbose_name='last name', max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_verified = models.BooleanField('verified', default=False)
@@ -50,7 +47,7 @@ class User(AbstractBaseUser):
     objects = UserAccountManager()
     USERNAME_FIELD = 'email'
 
-    # REQUIRED_FIELDS = ['first_name', 'last_name']
+    # REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email
@@ -119,4 +116,3 @@ class DealInfo(models.Model):
             if deal.lower_border:
                 if deal.stock.last <= deal.lower_border:
                     cls.send_notification(deal, deal.lower_border, 'нижняя')
-
